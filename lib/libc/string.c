@@ -142,15 +142,25 @@ memset(void *s, int c, size_t n)
 char *
 strrev(char *s)
 {
-    char tmp;
-    int8_t i;
-    int8_t length = strlen(s) - 1;
+    /*
+     * Thanks to d0p1s4m4 <3 
+     */
 
-    for (i = length; i > 0; i--)
+    int start;
+    int end;
+    char tmp;
+
+    start = 0;
+    end = strlen(s) - 1;
+
+    while (start < end)
     {
-        tmp = s[i];
-        s[i] = s[length - i];
-        s[length - i] = tmp;
+        tmp = s[start];
+        s[start] = s[end];
+        s[end] = tmp;
+
+        start++;
+        end--;
     }
 
     return s;

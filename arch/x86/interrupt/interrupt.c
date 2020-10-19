@@ -68,7 +68,15 @@ const char *exceptions[32] = {
 void
 register_dump(struct InterruptStackFrame stackframe)
 {
-    klog(NONE, " CS=%04x DS=%04x  ES=%04x  FS=%04x   GS=%04x\n",
+    int32_t cr0;
+    int32_t cr2;
+    int32_t cr3;
+
+    __asm__ volatile ("mov %%cr0, %0":"=r" (cr0));
+    __asm__ volatile ("mov %%cr2, %0":"=r" (cr2));
+    __asm__ volatile ("mov %%cr3, %0":"=r" (cr3));
+
+    klog(NONE, "CS=%04x      DS=%04x      ES=%04x      FS=%04x       GS=%04x\n",
          stackframe.cs, stackframe.ds, stackframe.es, stackframe.fs, stackframe.gs);
     klog(NONE, "EAX=%08x EBX=%08x ECX=%08x EDX=%08x\n", stackframe.eax,
          stackframe.ebx, stackframe.ecx, stackframe.edx);
@@ -76,6 +84,7 @@ register_dump(struct InterruptStackFrame stackframe)
          stackframe.esi, stackframe.ebp, stackframe.esp);
     klog(NONE, "INT=%08x ERR=%08x EIP=%08x FLG=%08x\n", stackframe.intno,
          stackframe.err, stackframe.eip, stackframe.eflags);
+    klog(NONE, "CR0=%08x CR2=%08x CR3=%08x\n", cr0, cr2, cr3);
 }
 
 void
@@ -99,7 +108,6 @@ void
 interrupts_handler(uint32_t esp, struct InterruptStackFrame stackframe)
 {
     uint32_t ebp;
-    char eip[9];
 
     __unused(esp);
 
@@ -107,15 +115,6 @@ interrupts_handler(uint32_t esp, struct InterruptStackFrame stackframe)
     {
         klog(ERROR, "%s (INT: %x, ERR: %08x)\n", exceptions[stackframe.intno],
              stackframe.intno, stackframe.err);
-
-        itoa(stackframe.eip, eip, 16);
-        vga_printerr("\n/!\\ KERNEL EXCEPTION /!\\\n");
-        vga_print(exceptions[stackframe.intno]);
-        vga_print("\nEIP:");
-        vga_print(eip);
-        vga_print("\n");
-        vga_print("\n\nPlease check the serial port !\n");
-        vga_printerr("\n\nPress ENTER to REBOOT");
 
         disable_vga_cursor();
 
@@ -135,7 +134,9 @@ interrupts_handler(uint32_t esp, struct InterruptStackFrame stackframe)
                 break;
             }
         }
-        reboot();
+
+        disable_interrupts();
+        hlt();
     }
 
     else if (stackframe.intno < 48)

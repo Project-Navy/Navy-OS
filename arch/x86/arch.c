@@ -63,7 +63,6 @@ init_arch(BootInfo * info)
 {
     struct ACPISDTHeader *rsdt;
 
-    term_init();
     serial_init(COM1);
     serial_print(COM1, "\033c");
 
@@ -101,6 +100,7 @@ init_arch(BootInfo * info)
     }
 
     init_paging(info);
+    term_init();
 }
 
 void

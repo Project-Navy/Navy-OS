@@ -19,6 +19,7 @@
 #include <stdint.h>
 #include <multiboot2.h>
 #include <Navy/libmultiboot.h>
+#include <string.h>
 
 
 #include "kernel/warning.h"
@@ -39,14 +40,12 @@ kmain(uintptr_t addr, uint32_t magic)
     }
 
     multiboot2_parse_header(&info, addr);
-
-
     init_arch(&info);
 
     klog(NONE, ascii_art);
     klog(OK, "Available memory: %dMib\n", info.memory_usable / (1024 * 1024));
-    vga_print(ascii_art);
 
+    vga_print(ascii_art);
     disable_interrupts();
     hlt();
 }

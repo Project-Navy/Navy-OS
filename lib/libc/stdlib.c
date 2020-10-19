@@ -30,13 +30,12 @@ itoa(int32_t value, char *str, uint16_t base)
 
     if (value < 0)
     {
-        str[index++] = '-';
+        value *= -1;
     }
 
     do
     {
         digit = value % base;
-
         value /= base;
 
         if (digit < 0xa)
@@ -58,6 +57,7 @@ itoa(int32_t value, char *str, uint16_t base)
     return str;
 
 }
+
 
 int32_t
 atoi(const char *nptr)

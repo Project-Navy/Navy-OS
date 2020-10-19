@@ -120,7 +120,7 @@ physical_set_used(Range range)
 
     if (!is_range_page_aligned(range))
     {
-        klog(ERROR, "This memory range is not page aligned ! (BEGIN: %d, SIZE: %d)\n",
+        klog(ERROR, "This memory range is not page aligned ! (BEGIN: %x, SIZE: %x)\n",
              range.begin, range.size);
         disable_interrupts();
         hlt();

@@ -7,9 +7,6 @@ DIRECTORY_GUARD=@mkdir -p $(@D)
 
 CC := i686-elf-gcc
 CFLAGS := \
-    -O0 \
-    -fno-exceptions 	        \
-    -fno-omit-frame-pointer     \
     -MD			                \
     -Wall		                \
     -Wextra		                \

@@ -82,7 +82,6 @@ init_paging(BootInfo * info)
     Range page_zero;
 
     size_t i;
-    uint32_t cr3;
     PageDirEntry *dir_entry;
 
     init_bitmap();
@@ -128,35 +127,19 @@ init_paging(BootInfo * info)
     virtual_free(kernel_address_space(), page_zero);
     physical_set_used(page_zero);
 
-    if (!address_space_switch(kernel_address_space()))
-    {
-        __asm__ volatile("mov %%cr3, %0" : "=r"(cr3));
-        klog(OK, "Valeur de CR3 = %x\n", cr3);
-        _asm_init_paging();
-        klog(OK, "Paging enabled !\n");
-    }
+    address_space_switch(kernel_address_space());
 
-    else 
-    {
-        klog(ERROR, "Couldn't enable paging\n");
-        disable_interrupts();
-        hlt();
-    }
+    _asm_init_paging();
+    klog(OK, "Paging enabled !\n");
 }
 
-int
+void
 address_space_switch(void *address_space)
 {
-    uintptr_t addr = virtual_to_physical(kernel_address_space(), (uintptr_t) address_space);
-
-    if(addr)
-    {
-        /*_asm_load_pagedir(addr); */
-        __asm__ volatile("mov %0, %%cr3" :: "r"(addr));
-        return 0;
-    }
-
-    return 1;
+    uintptr_t addr =
+        virtual_to_physical(kernel_address_space(), (uintptr_t) address_space);
+    klog(OK, "addr: %x\n", addr);
+    _asm_load_pagedir(addr);
 }
 
 bool
@@ -270,7 +253,7 @@ memory_map_identity(void *address_space, Range range, uint8_t mode)
 {
     if (!is_range_page_aligned(range))
     {
-        klog(ERROR, "This memory range is not page aligned ! (START: 0%x, LEN: %d)",
+        klog(ERROR, "This memory range is not page aligned ! (START: 0%x, LEN: %x)",
              range.begin, range.size);
         disable_interrupts();
         hlt();

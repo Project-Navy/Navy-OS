@@ -18,6 +18,9 @@
 
 #include "arch/x86/device/vga.h"
 #include "arch/x86/io.h"
+#include "arch/x86/memory/virtual.h"
+
+#include <Navy/range.h>
 
 uint8_t col;
 uint8_t row;
@@ -29,7 +32,19 @@ uint16_t *vga_buffer = (uint16_t *) 0xB8000;
 void
 term_init(void)
 {
+    Range vga_range;
 
+    vga_range.begin = 0xb8000;
+    vga_range.size = 4096;
+    
+    memory_map_identity(kernel_address_space(), vga_range, MEMORY_NONE);
+    term_clear();
+}
+
+
+void
+term_clear(void)
+{
     uint16_t index;
 
     /*
@@ -57,13 +72,6 @@ term_init(void)
     col = 0;
     row = 0;
     movcur(col, row);
-}
-
-
-void
-term_clear(void)
-{
-    term_init();
 }
 
 

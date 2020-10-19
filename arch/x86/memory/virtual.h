@@ -19,9 +19,7 @@
 #define _NAVY_x86_VIRTUAL_H
 #pragma GCC diagnostic ignored "-Wpedantic"
 
-#ifndef PAGE_SIZE
 #define PAGE_SIZE (4096)
-#endif
 
 #define __pd_index(x) ((x) >> 22)
 #define __pt_index(x) (((x) >> 12) & 0x03FF)
@@ -77,7 +75,8 @@ union TABLE_ENTRY
         bool accessed:1;
         bool ignored1:1;
         bool LargePage:1;
-        uint32_t Ignored2:3;
+        uint32_t Ignored2:4;    /* Do you see that 4 ? It was a 3, and @supercyp took 3
+                                 * hours of work to find it THANK YOU SO MUCH :heart: */
         uint32_t page_framenbr:20;
     } __attribute__((packed));
 
@@ -95,7 +94,8 @@ void init_paging(BootInfo *);
 void allocate_page(size_t);
 void memory_map_identity(void *, Range, uint8_t);
 void virtual_free(void *, Range);
-int address_space_switch(void *);
+void address_space_switch(void *);
+void *kernel_address_space();
 
 bool is_virtual_present(void *, uintptr_t);
 int virtual_map(void *, Range, uintptr_t, uint8_t);
