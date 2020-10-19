@@ -13,12 +13,12 @@ CFLAGS := \
     -Werror                     \
     -I.                         \
     -Ilib/multiboot             \
-    -Ilib/libc		            \
+	-Ilib/libc					\
 	-Ilib						\
     -ffreestanding	            \
     -g			                \
+	-ansi						\
     -nostdlib			        \
-    -ansi                       \
     -pedantic                   \
     -pedantic-errors            \
 

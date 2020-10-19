@@ -27,13 +27,17 @@
 
 void init_bitmap(void);
 void physical_set_used(Range);
-bool physical_is_used(Range);
-bool physical_page_is_used(uintptr_t);
 void physical_page_set_used(uintptr_t);
 void physical_set_free(Range);
 void physical_page_set_free(uintptr_t);
 void set_total_memory(size_t);
+
+bool physical_is_used(Range);
+bool physical_page_is_used(uintptr_t);
+
 size_t get_total_memory(void);
+
 Range allocate_memory(size_t);
+Range physical_alloc(size_t);
 
 #endif

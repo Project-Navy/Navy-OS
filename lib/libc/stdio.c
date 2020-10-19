@@ -50,7 +50,7 @@ gets(char *s)
 }
 
 void
-vs_printf(char *str, const char *format, va_list ap) 
+vs_printf(char *str, const char *format, va_list ap)
 {
     char pad[2];
     char nbr[64];
@@ -107,7 +107,7 @@ vs_printf(char *str, const char *format, va_list ap)
 
             padding = 0;
 
-            strcpy(str+index, nbr);
+            strcpy(str + index, nbr);
             index += strlen(nbr);
 
             is_parsing = false;
@@ -133,8 +133,8 @@ vs_printf(char *str, const char *format, va_list ap)
             }
 
             padding = 0;
-            
-            strcpy(str+index, nbr);
+
+            strcpy(str + index, nbr);
             index += strlen(nbr);
 
             is_parsing = false;

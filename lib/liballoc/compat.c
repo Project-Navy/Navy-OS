@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Jordan DALCQ & contributors
+ * Copyright (C) 2020  Jordan DALCQ & contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,37 +15,43 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
-#include <stddef.h>
-#include <stdint.h>
-#include <multiboot2.h>
-#include <Navy/libmultiboot.h>
-#include <string.h>
+#include <liballoc/compat.h>
 
-
-#include "kernel/warning.h"
-#include "kernel/log.h"
-#include "kernel/ascii.h"
 #include "arch/arch.h"
+#include "arch/x86/memory/virtual.h"
 
-void
-kmain(uintptr_t addr, uint32_t magic)
+int
+liballoc_lock(void)
 {
-    BootInfo info;
-
-    if (magic != MULTIBOOT2_BOOTLOADER_MAGIC)
-    {
-        disable_interrupts();
-        hlt();
-    }
-
-    multiboot2_parse_header(&info, addr);
-    init_arch(&info);
-
-    klog(NONE, ascii_art);
-    klog(OK, "Available memory: %dMib\n", info.memory_usable / (1024 * 1024));
-
-    vga_print(ascii_art);
     disable_interrupts();
-    hlt();
+    return 0;
+}
+
+int
+liballoc_unlock(void)
+{
+    enable_interrupts();
+    return 0;
+}
+
+void *
+liballoc_alloc(int pages)
+{
+    uintptr_t addr;
+
+    memory_alloc(kernel_address_space(), pages * PAGE_SIZE, MEMORY_NONE, &addr);
+    return (void *) addr;
+}
+
+int
+liballoc_free(void *addr, int size)
+{
+    Range range;
+
+    range.begin = (uintptr_t) addr;
+    range.size = size;
+
+    virtual_free(kernel_address_space(), range);
+
+    return 0;
 }

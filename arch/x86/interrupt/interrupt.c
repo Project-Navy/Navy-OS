@@ -118,7 +118,7 @@ interrupts_handler(uint32_t esp, struct InterruptStackFrame stackframe)
         if (stackframe.intno > 1)
         {
             klog(ERROR, "%s (INT: %x, ERR: %08x)\n", exceptions[stackframe.intno],
-                stackframe.intno, stackframe.err);
+                 stackframe.intno, stackframe.err);
         }
 
         disable_vga_cursor();

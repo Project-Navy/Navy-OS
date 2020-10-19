@@ -166,6 +166,82 @@ is_virtual_present(void *addr_space, uintptr_t virtual_addr)
     return page_table_entry.present;
 }
 
+Range
+virtual_alloc(void *address_space, Range range, uint8_t mode)
+{
+    size_t i;
+    Range final_range;
+    uintptr_t current_addr;
+
+    uintptr_t virt_addr = 0;
+    size_t current_size = 0;
+    bool is_user_memory = mode & MEMORY_USER;
+
+    for (i = (is_user_memory ? 256 : 1) * 1024; i < (is_user_memory ? 1024 : 256); i++)
+    {
+        current_addr = i * PAGE_SIZE;
+
+        if (!is_virtual_present(address_space, current_addr))
+        {
+            if (current_size == 0)
+            {
+                virt_addr = current_addr;
+            }
+
+            current_size += PAGE_SIZE;
+
+            if (current_size == range.begin)
+            {
+                virtual_map(address_space, range, virt_addr, mode);
+
+                final_range.begin = virt_addr;
+                final_range.size = current_size;
+
+                return final_range;
+            }
+        }
+        else
+        {
+            current_size = 0;
+        }
+
+    }
+
+    panic("Out of virutal memory !");
+    return range;
+}
+
+int
+memory_alloc(void *address_space, size_t size, uint8_t mode, uintptr_t * out_addr)
+{
+    Range range;
+    uintptr_t virt_addr;
+
+    if (size % 4096 != 0)
+    {
+        panic("The size is not page aligned ! (size: %x)", size);
+    }
+
+    if (!size)
+    {
+        panic("Allocation with size = 0 !");
+    }
+
+    *out_addr = 0;
+    range = physical_alloc(size);
+
+    virt_addr = virtual_alloc(address_space, range, mode).begin;
+
+    if (mode & MEMORY_CLEAR)
+    {
+        memset((void *) virt_addr, 0, size);
+    }
+
+    *out_addr = virt_addr;
+    return 0;
+
+}
+
 void
 memory_alloc_identity(void *address_space, uint8_t mode, uintptr_t * out_addr)
 {
@@ -253,7 +329,7 @@ memory_map_identity(void *address_space, Range range, uint8_t mode)
     if (!is_range_page_aligned(range))
     {
         panic("This memory range is not page aligned ! (START: 0%x, LEN: %x)",
-             range.begin, range.size);
+              range.begin, range.size);
     }
 
     physical_set_used(range);

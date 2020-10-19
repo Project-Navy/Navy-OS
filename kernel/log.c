@@ -30,6 +30,7 @@ klog(Level level, const char *format, ...)
 {
     char output[512];
     va_list ap;
+
     va_start(ap, format);
 
     if (level == PANIC)

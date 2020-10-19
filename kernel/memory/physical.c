@@ -117,7 +117,7 @@ physical_set_used(Range range)
     if (!is_range_page_aligned(range))
     {
         panic("This memory range is not page aligned ! (BEGIN: %x, SIZE: %x)\n",
-             range.begin, range.size);
+              range.begin, range.size);
     }
 
     for (i = 0; i < range.size / PAGE_SIZE; i++)
@@ -130,6 +130,34 @@ physical_set_used(Range range)
             physical_page_set_used(address);
         }
     }
+}
+
+Range
+physical_alloc(size_t size)
+{
+    size_t i;
+    Range range;
+
+    if (!size % PAGE_SIZE)
+    {
+        panic("The size is not page aligned (size = %x)", size);
+    }
+
+    for (i = best_bet; i < ((TOTAL_MEMORY - size) / PAGE_SIZE); i++)
+    {
+        range.begin = i * PAGE_SIZE;
+        range.size = size;
+
+        if (!physical_is_used(range))
+        {
+            physical_set_used(range);
+            return range;
+        }
+    }
+
+    panic("Out of physical memory !\tTrying to allocate %dkio but free memory is %dkio",
+          size / 1024, TOTAL_MEMORY / 1024);
+    return range;
 }
 
 void
