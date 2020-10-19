@@ -138,7 +138,6 @@ address_space_switch(void *address_space)
 {
     uintptr_t addr =
         virtual_to_physical(kernel_address_space(), (uintptr_t) address_space);
-    klog(OK, "addr: %x\n", addr);
     _asm_load_pagedir(addr);
 }
 
@@ -196,7 +195,7 @@ memory_alloc_identity(void *address_space, uint8_t mode, uintptr_t * out_addr)
 
     }
 
-    klog(ERROR, "Failed to allocate identity mapped page !\n");
+    panic("Failed to allocate identity mapped page !");
     *out_addr = 0;
 
     disable_interrupts();
@@ -253,10 +252,8 @@ memory_map_identity(void *address_space, Range range, uint8_t mode)
 {
     if (!is_range_page_aligned(range))
     {
-        klog(ERROR, "This memory range is not page aligned ! (START: 0%x, LEN: %x)",
+        panic("This memory range is not page aligned ! (START: 0%x, LEN: %x)",
              range.begin, range.size);
-        disable_interrupts();
-        hlt();
     }
 
     physical_set_used(range);

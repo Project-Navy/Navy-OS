@@ -69,9 +69,7 @@ physical_set_free(Range range)
 
     if (!is_range_page_aligned(range))
     {
-        klog(ERROR, "Range not page aligned !\n");
-        disable_interrupts();
-        hlt();
+        panic("Range not page aligned !\n");
     }
 
     for (i = 0; i < range.size / PAGE_SIZE; i++)
@@ -94,9 +92,7 @@ physical_is_used(Range range)
 
     if (!is_range_page_aligned(range))
     {
-        klog(ERROR, "RANGE NOT ALIGNED!\n");
-        disable_interrupts();
-        hlt();
+        panic("RANGE NOT ALIGNED!\n");
     }
 
     for (i = 0; i < range.size / PAGE_SIZE; i++)
@@ -120,10 +116,8 @@ physical_set_used(Range range)
 
     if (!is_range_page_aligned(range))
     {
-        klog(ERROR, "This memory range is not page aligned ! (BEGIN: %x, SIZE: %x)\n",
+        panic("This memory range is not page aligned ! (BEGIN: %x, SIZE: %x)\n",
              range.begin, range.size);
-        disable_interrupts();
-        hlt();
     }
 
     for (i = 0; i < range.size / PAGE_SIZE; i++)

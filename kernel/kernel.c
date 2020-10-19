@@ -15,6 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <stdio.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <multiboot2.h>
@@ -34,13 +35,14 @@ kmain(uintptr_t addr, uint32_t magic)
 
     if (magic != MULTIBOOT2_BOOTLOADER_MAGIC)
     {
-        klog(ERROR, "Invalid magic number: 0x%x\n", magic);
         disable_interrupts();
         hlt();
     }
 
     multiboot2_parse_header(&info, addr);
     init_arch(&info);
+
+    panic("Oh non tu as %d pommes !\n", 56);
 
     klog(NONE, ascii_art);
     klog(OK, "Available memory: %dMib\n", info.memory_usable / (1024 * 1024));

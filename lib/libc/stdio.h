@@ -19,7 +19,11 @@
 #ifndef _NAVY_LIBC_STDIO_H
 #define _NAVY_LIBC_STDIO_H
 
+#include <stdarg.h>
+
 int getchar(void);
 char *gets(char *);
+
+void vs_printf(char *, const char *, va_list);
 
 #endif

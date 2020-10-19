@@ -165,3 +165,16 @@ strrev(char *s)
 
     return s;
 }
+
+char *
+strcpy(char *dest, const char *src)
+{
+    size_t index = 0; 
+
+    while(*src)
+    {
+        dest[index++] = *src++;
+    }
+
+    return dest;
+}

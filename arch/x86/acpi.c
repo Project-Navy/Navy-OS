@@ -53,8 +53,7 @@ init_acpi(BootInfo * info)
 
         if (!rsdt_checksum(rsdt))
         {
-            klog(ERROR, "RSDT table invalid !");
-            hlt();
+            panic("RSDT table invalid !");
         }
 
         fadt = (struct FADT *) find_SDT(rsdt, "FADT");

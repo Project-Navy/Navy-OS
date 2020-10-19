@@ -85,8 +85,7 @@ init_apic(struct ACPISDTHeader *rsdt)
                 klog(OK, "LAPIC_AO !\n");
                 break;
             default:
-                klog(ERROR, "Unknown entry, CODE: %d\n", entry->type);
-                hlt();
+                panic("Unknown entry, CODE: %d\n", entry->type);
         }
 
         entry = (struct MADT_Entry *) ((uint32_t) entry + entry->length);

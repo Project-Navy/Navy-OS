@@ -36,7 +36,7 @@ term_init(void)
 
     vga_range.begin = 0xb8000;
     vga_range.size = 4096;
-    
+
     memory_map_identity(kernel_address_space(), vga_range, MEMORY_NONE);
     term_clear();
 }

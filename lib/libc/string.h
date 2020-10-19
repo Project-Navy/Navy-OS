@@ -27,6 +27,7 @@ char *strncpy(char *, const char *, size_t);
 char *memcpy(void *, const void *, size_t);
 void *memset(void *, int, size_t);
 char *strrev(char *);
+char *strcpy(char *, const char *);
 int memcmp(const void *, const void *, size_t);
 int strncmp(const char *, const char *, size_t);
 

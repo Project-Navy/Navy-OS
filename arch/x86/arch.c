@@ -36,9 +36,13 @@
 #include "arch/x86/memory/virtual.h"
 
 #include "kernel/log.h"
+
 #include <Navy/macro.h>
 #include <multiboot2.h>
 #include <Navy/libmultiboot.h>
+
+#include <stdio.h>
+#include <stdarg.h>
 
 void
 debug_print(const char *msg)
@@ -93,9 +97,7 @@ init_arch(BootInfo * info)
         init_a20();
         if (!check_a20())
         {
-            klog(ERROR, "Couldn't enable A20 Line !\n");
-            disable_interrupts();
-            hlt();
+            panic("Couldn't enable A20 Line !\n");
         }
     }
 
@@ -181,4 +183,18 @@ bool
 is_page_aligned(size_t x)
 {
     return x % 4096 == 0;
+}
+
+void 
+panic(char *msg, ...)
+{
+    char buffer[512];
+    va_list va;
+    va_start(va, msg);
+
+    vs_printf(buffer, msg, va);
+    klog(PANIC, buffer, msg);
+
+    va_end(va); 
+    __asm__("int $1");
 }

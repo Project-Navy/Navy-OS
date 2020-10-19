@@ -28,6 +28,7 @@ enum LOG_LEVEL
     ERROR,
     WARNING,
     OK,
+    PANIC,
     NONE
 };
 

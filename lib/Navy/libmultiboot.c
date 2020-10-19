@@ -41,9 +41,7 @@ multiboot2_parse_mmap(BootInfo * info, struct multiboot_tag_mmap *tag)
     {
         if (info->memory_map_size > LIMIT_MEMORY_MAP_SIZE)
         {
-            klog(ERROR, "Invalid memory map size ! (%d)\n", info->memory_usable);
-            disable_interrupts();
-            hlt();
+            panic("Invalid memory map size ! (%d)\n", info->memory_usable);
         }
 
         if ((mmap->addr > UINT32_MAX) || (mmap->addr + mmap->len > UINT32_MAX))
@@ -78,9 +76,7 @@ multiboot2_parse_module(BootInfo * info, struct multiboot_tag_module *m)
 
     if (info->modules_size < LIMIT_MODULES_SIZE)
     {
-        klog(ERROR, "Cannot parse the modules !\n");
-        disable_interrupts();
-        hlt();
+        panic("Cannot parse the modules !\n");
     }
 
     module = &info->modules[info->modules_size];

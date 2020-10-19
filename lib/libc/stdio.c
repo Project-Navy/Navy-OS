@@ -16,7 +16,10 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <stddef.h>
+#include <string.h>
+#include <stdarg.h>
 
 #include "arch/arch.h"
 #include "kernel/log.h"
@@ -44,4 +47,106 @@ gets(char *s)
     s[i++] = '\0';
 
     return s;
+}
+
+void
+vs_printf(char *str, const char *format, va_list ap) 
+{
+    char pad[2];
+    char nbr[64];
+
+    uint32_t padding = 0;
+    size_t index = 0;
+    const char *ptr = format;
+    bool is_parsing = false;
+
+    while (*ptr)
+    {
+        if (*ptr == '%')
+        {
+            if (is_parsing)
+            {
+                str[index++] = '%';
+                ptr++;
+                is_parsing = false;
+            }
+
+            else
+            {
+                is_parsing = true;
+                ptr++;
+                continue;
+            }
+        }
+
+        if (*ptr == '0' && is_parsing)
+        {
+            pad[0] = *++ptr;
+            pad[1] = '\0';
+            padding = atoi(pad);
+            ptr++;
+        }
+
+        if (*ptr == 's' && is_parsing)
+        {
+            debug_print(va_arg(ap, char *));
+
+            is_parsing = false;
+            ptr++;
+        }
+
+        if (*ptr == 'd' && is_parsing)
+        {
+            itoa(va_arg(ap, int), nbr, 10);
+
+            while (padding && padding - strlen(nbr) > 0)
+            {
+                str[index++] = '0';
+                padding--;
+            }
+
+            padding = 0;
+
+            strcpy(str+index, nbr);
+            index += strlen(nbr);
+
+            is_parsing = false;
+            ptr++;
+        }
+
+        if (*ptr == 'c' && is_parsing)
+        {
+            str[index++] = (char) va_arg(ap, int);
+
+            is_parsing = false;
+            ptr++;
+        }
+
+        if (*ptr == 'x' && is_parsing)
+        {
+            itoa(va_arg(ap, int), nbr, 16);
+
+            while (padding && padding - strlen(nbr) > 0)
+            {
+                str[index++] = '0';
+                padding--;
+            }
+
+            padding = 0;
+            
+            strcpy(str+index, nbr);
+            index += strlen(nbr);
+
+            is_parsing = false;
+        }
+
+        else
+        {
+            str[index++] = *ptr;
+        }
+
+        ptr++;
+    }
+
+    str[index] = '\0';
 }

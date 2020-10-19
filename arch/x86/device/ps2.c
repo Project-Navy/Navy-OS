@@ -91,7 +91,7 @@ init_ps2(struct ACPISDTHeader *rsdt)
 
     if (inb(0x60) == 0xfc)
     {
-        klog(ERROR, "PS2 Test failed !\n");
+        panic("PS2 Test failed !");
         has_second_channel = false;
         has_first_channel = false;
 

@@ -43,6 +43,7 @@ void hlt(void);
 void disable_interrupts(void);
 void enable_interrupts(void);
 void reboot(void);
+void panic(char *, ...);
 
 unsigned char kbd_getc(void);
 char kbd_lastKeyCode(void);

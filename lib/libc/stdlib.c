@@ -45,7 +45,7 @@ itoa(int32_t value, char *str, uint16_t base)
 
         else
         {
-            str[index++] = (digit - 0xa) + 'A';
+            str[index++] = (digit - 0xa) + 'a';
         }
 
     }
