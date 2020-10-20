@@ -30,6 +30,7 @@
 void debug_print(const char *);
 void debug_putc(const char);
 void debug_clear(void);
+void init_serial(void);
 
 void vga_print(const char *);
 void vga_printerr(const char *);

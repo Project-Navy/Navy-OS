@@ -22,6 +22,8 @@
 #include <string.h>
 #include <math.h>
 
+#include <liballoc/liballoc.h>
+
 char *
 itoa(int32_t value, char *str, uint16_t base)
 {
@@ -86,4 +88,25 @@ atoi(const char *nptr)
     }
 
     return return_value;
+}
+
+
+void *malloc(size_t size)
+{
+    return liballoc_malloc(size);
+}
+
+void *calloc(size_t nmemb, size_t size)
+{
+    return liballoc_calloc(nmemb, size);
+}
+
+void *realloc(void *ptr, size_t size)
+{
+    return liballoc_realloc(ptr, size);
+}
+
+void free(void *ptr)
+{
+    liballoc_free(ptr);
 }

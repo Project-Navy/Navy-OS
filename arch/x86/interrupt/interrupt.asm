@@ -63,8 +63,8 @@ _asm_interrupts_handler:
     push esp 
 
     call interrupts_handler 
-
-    add esp, 4
+    
+    mov esp, eax
 
     pop gs 
     pop fs 

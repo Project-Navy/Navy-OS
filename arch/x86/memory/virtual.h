@@ -100,6 +100,7 @@ void *kernel_address_space();
 Range virtual_alloc(void *, Range, uint8_t);
 
 bool is_virtual_present(void *, uintptr_t);
+bool paging_enabled(void);
 int memory_alloc(void *, size_t, uint8_t, uintptr_t *);
 int virtual_map(void *, Range, uintptr_t, uint8_t);
 uintptr_t virtual_to_physical(void *, uintptr_t);

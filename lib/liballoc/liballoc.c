@@ -1,4 +1,5 @@
 #include <liballoc/liballoc.h>
+#include <liballoc/compat.h>
 
 /**  Durand's Ridiculously Amazing Super Duper Memory functions.  */
 
@@ -307,7 +308,7 @@ allocate_new_tag(unsigned int size)
 
 
 void *
-malloc(size_t size)
+liballoc_malloc(size_t size)
 {
     int index;
     void *ptr;
@@ -432,7 +433,7 @@ malloc(size_t size)
 
 
 void
-free(void *ptr)
+liballoc_free(void *ptr)
 {
     int index;
     struct boundary_tag *tag;
@@ -503,7 +504,7 @@ free(void *ptr)
             if (pages < (unsigned int) l_pageCount)
                 pages = l_pageCount;
 
-            liballoc_free(tag, pages);
+            liballoc_free_(tag, pages);
 
 #ifdef DEBUG
             l_allocated -= pages * l_pageSize;
@@ -538,14 +539,14 @@ free(void *ptr)
 
 
 void *
-calloc(size_t nobj, size_t size)
+liballoc_calloc(size_t nobj, size_t size)
 {
     int real_size;
     void *p;
 
     real_size = nobj * size;
 
-    p = malloc(real_size);
+    p = liballoc_malloc(real_size);
 
     liballoc_memset(p, 0, real_size);
 
@@ -555,7 +556,7 @@ calloc(size_t nobj, size_t size)
 
 
 void *
-realloc(void *p, size_t size)
+liballoc_realloc(void *p, size_t size)
 {
     void *ptr;
     struct boundary_tag *tag;
@@ -563,11 +564,11 @@ realloc(void *p, size_t size)
 
     if (size == 0)
     {
-        free(p);
+        liballoc_free(p);
         return NULL;
     }
     if (p == NULL)
-        return malloc(size);
+        return liballoc_malloc(size);
 
     if (liballoc_lock != NULL)
         liballoc_lock();
@@ -579,9 +580,9 @@ realloc(void *p, size_t size)
     if (real_size > size)
         real_size = size;
 
-    ptr = malloc(size);
+    ptr = liballoc_malloc(size);
     liballoc_memcpy(ptr, p, real_size);
-    free(p);
+    liballoc_free(p);
 
     return ptr;
 }

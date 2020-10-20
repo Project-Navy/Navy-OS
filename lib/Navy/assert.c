@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Jordan DALCQ & contributors
+ * Copyright (C) 2020  Jordan DALCQ & contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,15 +15,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "arch/x86/io.h"
-#include "arch/x86/device/pit.h"
+#include "kernel/log.h"
+#include <Navy/macro.h>
 
-void
-init_pit(int hz)
+void 
+__assert(const char *exp, const char *file, const char *func, int line)
 {
-    int divisor = 1193180 / hz;
-
-    outb(0x43, 0x36);
-    outb(0x40, divisor & 0xff);
-    outb(0x40, divisor >> 8);
+    panic("Assert failed: %s in %s (%s line %d)\n", exp, file, func, line);
 }

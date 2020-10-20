@@ -34,15 +34,19 @@
 #include "arch/x86/memory/a20.h"
 #include "arch/x86/memory/gdt.h"
 #include "arch/x86/memory/virtual.h"
+#include "arch/x86/memory/task.h"
 
 #include "kernel/log.h"
+#include "kernel/init.h"
 
 #include <Navy/macro.h>
-#include <multiboot2.h>
 #include <Navy/libmultiboot.h>
+#include <Navy/assert.h>
 
 #include <stdio.h>
 #include <stdarg.h>
+
+int32_t interrupt_lock = 0;
 
 void
 debug_print(const char *msg)
@@ -62,16 +66,23 @@ debug_clear(void)
     debug_print("\033c");
 }
 
+void 
+init_serial(void)
+{
+    serial_init(COM1);
+    serial_print(COM1, "\033c");
+}
+
 void
 init_arch(BootInfo * info)
 {
     struct ACPISDTHeader *rsdt;
 
-    serial_init(COM1);
-    serial_print(COM1, "\033c");
-
     init_gdt();
     klog(OK, "GDT loaded\n");
+
+    init_idt();
+    klog(OK, "IDT loaded\n");
 
     rsdt = init_acpi(info);
     klog(OK, "ACPI initialised\n");
@@ -80,9 +91,6 @@ init_arch(BootInfo * info)
 
     init_pic();
     klog(OK, "PIC initialised\n");
-
-    init_idt();
-    klog(OK, "IDT loaded\n");
 
     init_pit(1000);
     klog(OK, "PIT initialised\n");
@@ -95,14 +103,17 @@ init_arch(BootInfo * info)
     else
     {
         init_a20();
-        if (!check_a20())
-        {
-            panic("Couldn't enable A20 Line !\n");
-        }
+        assert(check_a20());
     }
 
     init_paging(info);
     term_init();
+    
+    init_tasking();
+
+    create_task("Init", init);
+    create_task("A", a);
+    create_task("B", b);
 }
 
 void
@@ -121,12 +132,20 @@ void
 disable_interrupts(void)
 {
     __asm__("cli");
+    interrupt_lock++;
 }
+
 
 void
 enable_interrupts(void)
 {
-    __asm__("sti");
+    interrupt_lock--;
+    assert(interrupt_lock >= 0);
+
+    if (interrupt_lock == 0)
+    {
+        __asm__("sti");
+    }
 }
 
 void

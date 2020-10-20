@@ -20,7 +20,7 @@ CFLAGS := \
 	-ansi						\
     -nostdlib			        \
     -pedantic                   \
-    -pedantic-errors            \
+    -pedantic-errors            
 
 LD := i686-elf-ld
 LDFLAGS :=

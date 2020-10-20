@@ -22,6 +22,6 @@ int liballoc_lock(void);
 int liballoc_unlock(void);
 
 void *liballoc_alloc(int);
-int liballoc_free(void *, int);
+int liballoc_free_(void *, int);
 
 #endif

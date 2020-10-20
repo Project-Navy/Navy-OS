@@ -21,6 +21,7 @@
 #include "arch/x86/memory/virtual.h"
 
 #include <Navy/range.h>
+#include <Navy/assert.h>
 
 uint8_t col;
 uint8_t row;

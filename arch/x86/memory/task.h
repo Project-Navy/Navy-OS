@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Jordan DALCQ & contributors
+ * Copyright (C) 2020  Jordan DALCQ & contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,15 +15,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "arch/x86/io.h"
-#include "arch/x86/device/pit.h"
+#ifndef _NAVY_x86_MEMORY_TASKS_H_
+#define _NAVY_x86_MEMORY_TASKS_H_ 
+#pragma GCC diagnostic ignored "-Wpedantic"
 
-void
-init_pit(int hz)
+#include "arch/x86/interrupt/interrupt.h"
+
+#include <stdint.h>
+#include <stdbool.h>
+
+struct TASK 
 {
-    int divisor = 1193180 / hz;
+    uint32_t pid;
+    uint32_t stack;
+    bool state:1;
+    char name[32];
 
-    outb(0x43, 0x36);
-    outb(0x40, divisor & 0xff);
-    outb(0x40, divisor >> 8);
-}
+    void (*thread)();
+};
+
+typedef struct TASK task_t;
+
+int create_task(char *name, void (*thread)());
+unsigned int sched(unsigned int context);
+void init_tasking(void);
+
+#endif

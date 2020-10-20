@@ -16,9 +16,13 @@
  */
 
 #include <liballoc/compat.h>
+#include <stdbool.h>
 
 #include "arch/arch.h"
+#include "kernel/log.h"
 #include "arch/x86/memory/virtual.h"
+
+bool lock = false;
 
 int
 liballoc_lock(void)
@@ -44,7 +48,7 @@ liballoc_alloc(int pages)
 }
 
 int
-liballoc_free(void *addr, int size)
+liballoc_free_(void *addr, int size)
 {
     Range range;
 

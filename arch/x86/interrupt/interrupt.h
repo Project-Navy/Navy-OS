@@ -18,6 +18,8 @@
 #ifndef _NAVY_x86_INTERRUPT_H
 #define _NAVY_x86_INTERRUPT_H
 
+#include <stdint.h>
+
 extern void stack_dump(void);
 
 struct InterruptStackFrame

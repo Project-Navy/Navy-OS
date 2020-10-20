@@ -19,8 +19,14 @@
 #define _NAVY_LIBC_STDLIB_H
 
 #include <stdint.h>
+#include <stddef.h>
 
 char *itoa(int32_t, char *, uint16_t);
 int32_t atoi(const char *);
+
+void *malloc(size_t);
+void *calloc(size_t, size_t);
+void *realloc(void *, size_t);
+void free(void *);
 
 #endif

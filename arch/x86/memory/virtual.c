@@ -24,13 +24,17 @@
 #include <stddef.h>
 #include <multiboot2.h>
 #include <string.h>
+
 #include <Navy/macro.h>
+#include <Navy/assert.h>
 
 extern int __start;
 extern int __end;
 
 static struct PAGE_DIR kernel_page_dir __attribute__((aligned(PAGE_SIZE))) = { };
 static struct PAGE_TABLE kernel_page_table[256] __attribute__((aligned(PAGE_SIZE))) = { };
+
+bool is_paging_enabled = false;
 
 void
 virtual_free(void *address_space, Range range)
@@ -131,6 +135,13 @@ init_paging(BootInfo * info)
 
     _asm_init_paging();
     klog(OK, "Paging enabled !\n");
+    is_paging_enabled = true;
+}
+
+bool 
+paging_enabled(void)
+{
+    return is_paging_enabled;
 }
 
 void
@@ -177,7 +188,7 @@ virtual_alloc(void *address_space, Range range, uint8_t mode)
     size_t current_size = 0;
     bool is_user_memory = mode & MEMORY_USER;
 
-    for (i = (is_user_memory ? 256 : 1) * 1024; i < (is_user_memory ? 1024 : 256); i++)
+    for (i = (is_user_memory ? 256 : 1) * 1024; i < (is_user_memory ? 1024 : 256) * 1024; i++)
     {
         current_addr = i * PAGE_SIZE;
 
@@ -217,17 +228,11 @@ memory_alloc(void *address_space, size_t size, uint8_t mode, uintptr_t * out_add
     Range range;
     uintptr_t virt_addr;
 
-    if (size % 4096 != 0)
-    {
-        panic("The size is not page aligned ! (size: %x)", size);
-    }
-
-    if (!size)
-    {
-        panic("Allocation with size = 0 !");
-    }
+    assert(size % 4096 == 0);
+    assert(size != 0);
 
     *out_addr = 0;
+
     range = physical_alloc(size);
 
     virt_addr = virtual_alloc(address_space, range, mode).begin;
@@ -326,11 +331,7 @@ virtual_map(void *address_space, Range range, uintptr_t addr, uint8_t mode)
 void
 memory_map_identity(void *address_space, Range range, uint8_t mode)
 {
-    if (!is_range_page_aligned(range))
-    {
-        panic("This memory range is not page aligned ! (START: 0%x, LEN: %x)",
-              range.begin, range.size);
-    }
+    assert(is_range_page_aligned(range));
 
     physical_set_used(range);
     virtual_map(address_space, range, range.begin, mode);

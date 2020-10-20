@@ -89,13 +89,14 @@ vs_printf(char *str, const char *format, va_list ap)
 
         if (*ptr == 's' && is_parsing)
         {
-            debug_print(va_arg(ap, char *));
+            const char *s = va_arg(ap, const char *);
+            strcpy(str+index, s);
 
             is_parsing = false;
-            ptr++;
+            index += strlen(s);
         }
 
-        if (*ptr == 'd' && is_parsing)
+        else if (*ptr == 'd' && is_parsing)
         {
             itoa(va_arg(ap, int), nbr, 10);
 
@@ -109,20 +110,17 @@ vs_printf(char *str, const char *format, va_list ap)
 
             strcpy(str + index, nbr);
             index += strlen(nbr);
-
             is_parsing = false;
-            ptr++;
         }
 
-        if (*ptr == 'c' && is_parsing)
+        else if (*ptr == 'c' && is_parsing)
         {
             str[index++] = (char) va_arg(ap, int);
 
             is_parsing = false;
-            ptr++;
         }
 
-        if (*ptr == 'x' && is_parsing)
+        else if (*ptr == 'x' && is_parsing)
         {
             itoa(va_arg(ap, int), nbr, 16);
 
@@ -145,7 +143,10 @@ vs_printf(char *str, const char *format, va_list ap)
             str[index++] = *ptr;
         }
 
-        ptr++;
+        if (*ptr)
+        {
+            ptr++;
+        }
     }
 
     str[index] = '\0';

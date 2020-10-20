@@ -18,9 +18,8 @@
 #include "kernel/memory/physical.h"
 #include "kernel/log.h"
 
-#include "arch/arch.h"
-
 #include <Navy/range.h>
+#include <Navy/assert.h>
 
 size_t USED_MEMORY = 0;
 size_t TOTAL_MEMORY = 0;
@@ -137,11 +136,8 @@ physical_alloc(size_t size)
 {
     size_t i;
     Range range;
-
-    if (!size % PAGE_SIZE)
-    {
-        panic("The size is not page aligned (size = %x)", size);
-    }
+    
+    assert(size % PAGE_SIZE == 0);
 
     for (i = best_bet; i < ((TOTAL_MEMORY - size) / PAGE_SIZE); i++)
     {

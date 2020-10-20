@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Jordan DALCQ & contributors
+ * Copyright (C) 2020  Jordan DALCQ & contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,15 +15,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "arch/x86/io.h"
-#include "arch/x86/device/pit.h"
+#include "arch/arch.h"
+#include "kernel/log.h"
+#include "kernel/ascii.h"
 
-void
-init_pit(int hz)
+void 
+a(void)
 {
-    int divisor = 1193180 / hz;
+    while(1)
+    {
+        klog(OK, "A");
+    }
+}
 
-    outb(0x43, 0x36);
-    outb(0x40, divisor & 0xff);
-    outb(0x40, divisor >> 8);
+void 
+b(void)
+{
+    while(1)
+    {
+        klog(OK, "B");
+    }
+}
+
+void 
+init(void)
+{
+    klog(NONE, ascii_art);
+
+    vga_print(ascii_art);
+    for(;;);
 }

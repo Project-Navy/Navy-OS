@@ -20,11 +20,14 @@
 #include "kernel/abi/syscall.h"
 
 #include "arch/arch.h"
+
 #include "arch/x86/device/vga.h"
 #include "arch/x86/device/keyboard.h"
 #include "arch/x86/interrupt/apic.h"
 #include "arch/x86/interrupt/pic.h"
 #include "arch/x86/interrupt/interrupt.h"
+#include "arch/x86/memory/virtual.h"
+#include "arch/x86/memory/task.h"
 
 #include <stdlib.h>
 #include <Navy/macro.h>
@@ -106,18 +109,16 @@ backtrace(uint32_t * ebp)
     }
 }
 
-void
+uint32_t
 interrupts_handler(uint32_t esp, struct InterruptStackFrame stackframe)
 {
     uint32_t ebp;
-
-    __unused(esp);
 
     if (stackframe.intno < 32)
     {
         if (stackframe.intno > 1)
         {
-            klog(ERROR, "%s (INT: %x, ERR: %08x)\n", exceptions[stackframe.intno],
+            klog(ERROR, "%s (INT: %x, ERR: %08d)\n", exceptions[stackframe.intno],
                  stackframe.intno, stackframe.err);
         }
 
@@ -148,17 +149,23 @@ interrupts_handler(uint32_t esp, struct InterruptStackFrame stackframe)
     {
         uint8_t irq_nbr = stackframe.intno - 32;
 
+        if (irq_nbr == 0) 
+        {
+            esp = sched(esp);
+        }
+
         if (irq_nbr == 1)
         {
             keyscan();
         }
+
     }
 
     else if (stackframe.intno == 69)
     {
-        klog(OK, "GOT SYSCALL !\n");
         syscall(stackframe.eax, stackframe.ebx, stackframe.ecx);
     }
 
     PIC_sendEOI(stackframe.intno);
+    return esp;
 }

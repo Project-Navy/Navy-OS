@@ -15,37 +15,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
-#include <stddef.h>
-#include <stdint.h>
 #include <multiboot2.h>
 #include <Navy/libmultiboot.h>
-#include <string.h>
+#include <Navy/assert.h>
 
+#include <Navy/macro.h>
 
 #include "kernel/warning.h"
 #include "kernel/log.h"
-#include "kernel/ascii.h"
 #include "arch/arch.h"
 
 void
 kmain(uintptr_t addr, uint32_t magic)
 {
     BootInfo info;
+    init_serial();
 
-    if (magic != MULTIBOOT2_BOOTLOADER_MAGIC)
-    {
-        disable_interrupts();
-        hlt();
-    }
+    assert(magic == MULTIBOOT2_BOOTLOADER_MAGIC);
 
     multiboot2_parse_header(&info, addr);
     init_arch(&info);
-
-    klog(NONE, ascii_art);
-    klog(OK, "Available memory: %dMib\n", info.memory_usable / (1024 * 1024));
-
-    vga_print(ascii_art);
-    disable_interrupts();
-    hlt();
 }

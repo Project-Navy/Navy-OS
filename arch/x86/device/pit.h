@@ -20,6 +20,6 @@
 
 #include <stdint.h>
 
-void init_pit(uint16_t);
+void init_pit(int);
 
 #endif
