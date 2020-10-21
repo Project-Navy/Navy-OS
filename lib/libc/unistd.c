@@ -21,6 +21,6 @@
 unsigned int 
 usleep(unsigned int usec)
 {
-    syscall(SYS_usleep, usec, 0);
+    syscall(SYS_usleep, usec, 0, 0);
     return 0;
 }

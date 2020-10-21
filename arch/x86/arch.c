@@ -77,6 +77,7 @@ void
 init_arch(BootInfo * info)
 {
     struct ACPISDTHeader *rsdt;
+    uint32_t pid_a;
 
     init_gdt();
     klog(OK, "GDT loaded\n");
@@ -111,8 +112,11 @@ init_arch(BootInfo * info)
 
     init_tasking();
 
-    create_task("A", a);
+    pid_a = create_task("A", a);
     create_task("B", b);
+
+    __unused(pid_a);
+    klog(OK, "A returns: %s\n", (char *) task_wait(pid_a)); 
 }
 
 void

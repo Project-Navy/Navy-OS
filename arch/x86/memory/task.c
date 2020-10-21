@@ -27,14 +27,14 @@
 
 #define STACK_SIZE 0x1000
 
-task_t tasks[5];
+task_t tasks[5] = {0};
 
 int pid_limit = 5;
 int pid = -1;
 int new_pid = 0;
 
 int
-create_task(char *name, void (*thread)())
+create_task(char *name, void (*thread)()) 
 {
     disable_interrupts();
 
@@ -51,6 +51,8 @@ create_task(char *name, void (*thread)())
     task->stack_range.begin = addr;
     task->stack_range.size = STACK_SIZE;
 
+    task->joinee_pid = 0;
+    task->pid = new_pid;
     task->stack = addr + STACK_SIZE;
     task->address_space = kernel_address_space();   /* It's temporary */
 
@@ -86,6 +88,7 @@ create_task(char *name, void (*thread)())
 
     task->thread = thread;
     strncpy(task->name, (const char *) name, strlen((const char *) name));
+    klog(OK, "Task %d (%s) created !\n", task->pid, task->name);
 
     tasks[new_pid] = *task;
     last_pid = new_pid++;
@@ -94,23 +97,31 @@ create_task(char *name, void (*thread)())
     return last_pid;
 }
 
+void 
+idle(void)
+{
+    while(1)
+    {
+        hlt();
+    }
+}
+
 void
 init_tasking(void)
 {
     pid = create_task("System", NULL);
     create_task("Task Slayer", task_slayer);
+    create_task("Idle", idle);
 }
 
-int
-kill_task(int pid_to_kill)
+void
+exit_task(int return_value)
 {
-    if (pid_to_kill > new_pid)
-    {
-        return -1;
-    }
-    
-    tasks[pid_to_kill].state = GONNADIE;
-    return 0;
+    tasks[pid].return_value = return_value;
+    tasks[pid].state = DEPRESSED;
+
+    task_yield();
+    __builtin_unreachable();
 }
 
 uint32_t 
@@ -127,7 +138,7 @@ slay_task(task_t *task)
     memory_free(kernel_address_space(), task->stack_range);
     task->state = DEAD;
 
-    klog(LOG, "%s has been slayed\n", task->name);
+    klog(LOG, "%s  has been slayed\n", task->name);
 
     enable_interrupts();
 }
@@ -169,6 +180,56 @@ task_sleep(uint32_t milli)
     task_yield();
 }
 
+int
+task_wait(uint32_t wait_pid)
+{
+    disable_interrupts();
+
+    if (tasks[wait_pid].state == DEAD)
+    {
+        return -1;
+    }
+
+    tasks[pid].state = JOINING;
+    tasks[pid].joinee_pid = wait_pid;
+    enable_interrupts();
+
+    task_yield();
+
+    return tasks[pid].return_value;
+}
+
+void 
+update_task_state(void)
+{
+    int i;
+    task_t *joinee;
+
+    for (i = 0; i < pid_limit; i++)
+    {
+        if (tasks[i].state == JOINING)
+        {
+            joinee = &tasks[tasks[i].joinee_pid];
+
+            if (joinee->state == DEPRESSED)
+            {
+                tasks[i].return_value = joinee->return_value;
+                joinee->state = GONNADIE;
+                tasks[i].state = RUNNING;
+            }
+        }
+
+        if (tasks[i].state == SLEEPING) 
+        {
+            if (tasks[i].wakeup_tick <= fetch_tick())
+            {
+                tasks[i].state = RUNNING;
+            }
+        }
+
+    }
+}
+
 unsigned int
 sched(unsigned int context)
 {
@@ -177,6 +238,7 @@ sched(unsigned int context)
         return context;
     }
 
+    update_task_state();
     tasks[pid].stack = context;
 
     do
@@ -187,12 +249,6 @@ sched(unsigned int context)
         {
             pid = 0;
         }
-
-        if (tasks[pid].state == SLEEPING && tasks[pid].wakeup_tick <= fetch_tick())
-        {
-            tasks[pid].state = RUNNING;
-        }
-
     } while (tasks[pid].state != RUNNING); 
 
     return tasks[pid].stack;

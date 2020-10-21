@@ -33,9 +33,7 @@ a(void)
         usleep(500000);
     }
 
-    pthread_exit("A"); 
-    for(;;);
-
+    pthread_exit("I'm dead"); 
 }
 
 void
@@ -50,7 +48,6 @@ b(void)
     }
 
     pthread_exit("B");
-    for(;;);
 }
 
 void

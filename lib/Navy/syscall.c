@@ -25,12 +25,10 @@
 #include <Navy/syscall.h>
 #include <Navy/macro.h>
 
-int
-sys_tkill(pid_t pid, int sig)
+void
+sys_texit(int return_value)
 {
-    __unused(sig);
-
-    return kill_task(pid);    
+    exit_task(return_value);    
 }
 
 pid_t
@@ -44,9 +42,10 @@ sys_gettid(void)
 }
 
 uint32_t
-syscall(uint32_t eax, uint32_t ebx, uint32_t ecx)
+syscall(uint32_t eax, uint32_t ebx, uint32_t ecx, uint32_t edx)
 {
     uint32_t return_value = 0;
+    __unused(edx);
 
     switch (eax)
     {
@@ -54,8 +53,8 @@ syscall(uint32_t eax, uint32_t ebx, uint32_t ecx)
             klog(ebx, (char *) ecx);
             /* Implement syslog (https://www.kernel.org/doc/html/latest/core-api/printk-basics.html) */
             break;
-        case SYS_tkill:
-            return_value = sys_tkill((pid_t) ebx, ecx);
+        case SYS_texit:
+            sys_texit(ebx);
             break;
 
         case SYS_gettid:

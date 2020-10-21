@@ -24,15 +24,15 @@
 typedef enum SYSCALL
 {
     SYS_syslog,
-    SYS_tkill,
+    SYS_texit,
     SYS_gettid,
     SYS_usleep
 } Syscall;
 
 typedef int pid_t;
 
-int sys_tkill(pid_t, int);
+__no_return void sys_texit(int);
 pid_t sys_getpid(void);
-uint32_t syscall(uint32_t, uint32_t, uint32_t);
+uint32_t syscall(uint32_t, uint32_t, uint32_t, uint32_t);
 
 #endif

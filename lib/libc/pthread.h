@@ -19,10 +19,11 @@
 #define _NAVY_LIBC_PTHREAD_M_
 
 #include <stdint.h>
+#include <Navy/macro.h>
 
 typedef uint32_t pthread_t;
 
-void pthread_exit(void *);
+void __no_return pthread_exit(void *);
 pthread_t pthread_self(void);
 
 #endif

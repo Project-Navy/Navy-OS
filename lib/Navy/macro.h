@@ -20,5 +20,6 @@
 
 #define __unused(__stuff)(void)(__stuff)
 #define __align_up(__addr, __align) (((__addr) + (__align)-1) & ~((__align)-1))
+#define __no_return __attribute__((noreturn))
 
 #endif

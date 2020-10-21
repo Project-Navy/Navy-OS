@@ -21,15 +21,16 @@
 #include <Navy/syscall.h>
 #include <Navy/macro.h>
 
-void
+__no_return void
 pthread_exit(void *retptr)
 {
     __unused(retptr);
-    syscall(SYS_tkill, pthread_self(), 0);
+    syscall(SYS_texit, (uint32_t) retptr, 0, 0);
+    for(;;);
 }
 
 pthread_t 
 pthread_self(void)
 {
-    return syscall(SYS_gettid, 0, 0);
+    return syscall(SYS_gettid, 0, 0, 0);
 }

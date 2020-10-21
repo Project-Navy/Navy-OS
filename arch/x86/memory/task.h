@@ -25,13 +25,16 @@
 #include <stdbool.h>
 
 #include <Navy/range.h>
+#include <Navy/macro.h>
 
 typedef enum STATE
 {
+    DEAD = 0,
     RUNNING,
+    DEPRESSED,
     GONNADIE,
-    DEAD,
-    SLEEPING
+    SLEEPING,
+    JOINING
 } state;
 
 struct TASK
@@ -41,8 +44,12 @@ struct TASK
     uint8_t state;
     char name[32];
     void *address_space;
+    void *args;
     Range stack_range;
     uint32_t wakeup_tick;
+    uint32_t joinee_pid;
+    uintptr_t return_value;
+    uintptr_t joinee_return_value;
 
     void (*thread)();
 };
@@ -50,11 +57,13 @@ struct TASK
 typedef struct TASK task_t;
 
 int create_task(char *name, void (*thread)());
-int kill_task(int);
+__no_return void exit_task(int);
 unsigned int sched(unsigned int context);
 void init_tasking(void);
 void task_slayer(void);
+int task_wait(uint32_t);
 uint32_t task_get_pid(void);
 void task_sleep(uint32_t);
+void task_yield(void);
 
 #endif
