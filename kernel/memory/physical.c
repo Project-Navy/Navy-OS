@@ -136,7 +136,7 @@ physical_alloc(size_t size)
 {
     size_t i;
     Range range;
-    
+
     assert(size % PAGE_SIZE == 0);
 
     for (i = best_bet; i < ((TOTAL_MEMORY - size) / PAGE_SIZE); i++)

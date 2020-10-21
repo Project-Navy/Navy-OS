@@ -90,7 +90,8 @@ vs_printf(char *str, const char *format, va_list ap)
         if (*ptr == 's' && is_parsing)
         {
             const char *s = va_arg(ap, const char *);
-            strcpy(str+index, s);
+
+            strcpy(str + index, s);
 
             is_parsing = false;
             index += strlen(s);

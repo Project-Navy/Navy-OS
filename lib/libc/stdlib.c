@@ -91,22 +91,26 @@ atoi(const char *nptr)
 }
 
 
-void *malloc(size_t size)
+void *
+malloc(size_t size)
 {
     return liballoc_malloc(size);
 }
 
-void *calloc(size_t nmemb, size_t size)
+void *
+calloc(size_t nmemb, size_t size)
 {
     return liballoc_calloc(nmemb, size);
 }
 
-void *realloc(void *ptr, size_t size)
+void *
+realloc(void *ptr, size_t size)
 {
     return liballoc_realloc(ptr, size);
 }
 
-void free(void *ptr)
+void
+free(void *ptr)
 {
     liballoc_free(ptr);
 }

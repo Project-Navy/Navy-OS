@@ -15,11 +15,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "kernel/log.h"
-#include <Navy/macro.h>
 
-void
-__assert(const char *exp, const char *file, const char *func, int line)
+#ifndef _NAVY_ABI_SYSCALL_H
+#define _NAVY_ABI_SYSCALL_H
+
+#include <stdint.h>
+
+typedef enum SYSCALL
 {
-    panic("Assert failed: %s in %s (%s line %d)\n", exp, file, func, line);
-}
+    SYS_syslog,
+    SYS_tkill,
+    SYS_gettid,
+    SYS_usleep
+} Syscall;
+
+typedef int pid_t;
+
+int sys_tkill(pid_t, int);
+pid_t sys_getpid(void);
+uint32_t syscall(uint32_t, uint32_t, uint32_t);
+
+#endif

@@ -16,20 +16,33 @@
  */
 
 #ifndef _NAVY_x86_MEMORY_TASKS_H_
-#define _NAVY_x86_MEMORY_TASKS_H_ 
-#pragma GCC diagnostic ignored "-Wpedantic"
+#define _NAVY_x86_MEMORY_TASKS_H_
+#pragma GCC diagnostic ignored "-Wdeclaration-after-statement"
 
 #include "arch/x86/interrupt/interrupt.h"
 
 #include <stdint.h>
 #include <stdbool.h>
 
-struct TASK 
+#include <Navy/range.h>
+
+typedef enum STATE
+{
+    RUNNING,
+    GONNADIE,
+    DEAD,
+    SLEEPING
+} state;
+
+struct TASK
 {
     uint32_t pid;
     uint32_t stack;
-    bool state:1;
+    uint8_t state;
     char name[32];
+    void *address_space;
+    Range stack_range;
+    uint32_t wakeup_tick;
 
     void (*thread)();
 };
@@ -37,7 +50,11 @@ struct TASK
 typedef struct TASK task_t;
 
 int create_task(char *name, void (*thread)());
+int kill_task(int);
 unsigned int sched(unsigned int context);
 void init_tasking(void);
+void task_slayer(void);
+uint32_t task_get_pid(void);
+void task_sleep(uint32_t);
 
 #endif

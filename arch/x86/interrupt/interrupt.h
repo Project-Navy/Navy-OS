@@ -21,6 +21,7 @@
 #include <stdint.h>
 
 extern void stack_dump(void);
+unsigned int fetch_tick(void);
 
 struct InterruptStackFrame
 {

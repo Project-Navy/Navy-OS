@@ -66,7 +66,7 @@ debug_clear(void)
     debug_print("\033c");
 }
 
-void 
+void
 init_serial(void)
 {
     serial_init(COM1);
@@ -108,10 +108,9 @@ init_arch(BootInfo * info)
 
     init_paging(info);
     term_init();
-    
+
     init_tasking();
 
-    create_task("Init", init);
     create_task("A", a);
     create_task("B", b);
 }

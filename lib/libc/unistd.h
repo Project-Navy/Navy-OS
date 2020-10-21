@@ -15,11 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "kernel/log.h"
-#include <Navy/macro.h>
+#ifndef _NAVY_LIBC_UNISTD_H_
+#define _NAVY_LIBC_UNISTD_H_ 
 
-void
-__assert(const char *exp, const char *file, const char *func, int line)
-{
-    panic("Assert failed: %s in %s (%s line %d)\n", exp, file, func, line);
-}
+unsigned int usleep(unsigned int);
+
+#endif

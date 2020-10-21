@@ -16,7 +16,7 @@
  */
 
 #ifndef _NAVY_ASSERT_H
-#define _NAVY_ASSERT_H 
+#define _NAVY_ASSERT_H
 
 #define assert(__expr) ((__expr) ? (void)(0) : __assert(#__expr, __FILE__, __FUNCTION__, __LINE__))
 

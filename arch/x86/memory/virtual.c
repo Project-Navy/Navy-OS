@@ -4,7 +4,7 @@
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+:* (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -80,6 +80,35 @@ kernel_address_space()
 }
 
 void
+memory_free(void *address_space, Range range)
+{
+    size_t i;
+    uintptr_t virt_addr;
+
+    Range page_phys_range;
+    Range page_virt_range;
+
+    assert(is_range_page_aligned(range));
+
+    for (i = 0; i < range.size / PAGE_SIZE; i++)
+    {
+        virt_addr = range.begin + i * PAGE_SIZE;
+
+        if (is_virtual_present(address_space, virt_addr))
+        {
+            page_phys_range.begin = virtual_to_physical(address_space, virt_addr);
+            page_phys_range.size = PAGE_SIZE;
+
+            page_virt_range.begin = virt_addr;
+            page_virt_range.size = PAGE_SIZE;
+
+            physical_set_free(page_phys_range);
+            virtual_free(address_space, page_virt_range);
+        }
+    }
+}
+
+void
 init_paging(BootInfo * info)
 {
     Range kernel_range;
@@ -138,7 +167,7 @@ init_paging(BootInfo * info)
     is_paging_enabled = true;
 }
 
-bool 
+bool
 paging_enabled(void)
 {
     return is_paging_enabled;
@@ -188,7 +217,8 @@ virtual_alloc(void *address_space, Range range, uint8_t mode)
     size_t current_size = 0;
     bool is_user_memory = mode & MEMORY_USER;
 
-    for (i = (is_user_memory ? 256 : 1) * 1024; i < (is_user_memory ? 1024 : 256) * 1024; i++)
+    for (i = (is_user_memory ? 256 : 1) * 1024; i < (is_user_memory ? 1024 : 256) * 1024;
+         i++)
     {
         current_addr = i * PAGE_SIZE;
 

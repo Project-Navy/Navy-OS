@@ -15,11 +15,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "kernel/log.h"
+
+#include <pthread.h>
+
+#include <Navy/syscall.h>
 #include <Navy/macro.h>
 
 void
-__assert(const char *exp, const char *file, const char *func, int line)
+pthread_exit(void *retptr)
 {
-    panic("Assert failed: %s in %s (%s line %d)\n", exp, file, func, line);
+    __unused(retptr);
+    syscall(SYS_tkill, pthread_self(), 0);
+}
+
+pthread_t 
+pthread_self(void)
+{
+    return syscall(SYS_gettid, 0, 0);
 }

@@ -16,22 +16,60 @@
  */
 
 
-#include "kernel/abi/syscall.h"
 #include "kernel/log.h"
+
+#include "arch/x86/memory/task.h"
+
 #include <stdarg.h>
+
+#include <Navy/syscall.h>
+#include <Navy/macro.h>
+
+int
+sys_tkill(pid_t pid, int sig)
+{
+    __unused(sig);
+
+    return kill_task(pid);    
+}
+
+pid_t
+sys_gettid(void)
+{
+    pid_t pid;
+
+    pid = task_get_pid();    
+
+    return pid;
+}
 
 uint32_t
 syscall(uint32_t eax, uint32_t ebx, uint32_t ecx)
 {
+    uint32_t return_value = 0;
+
     switch (eax)
     {
-        case 0:
+        case SYS_syslog:
             klog(ebx, (char *) ecx);
+            /* Implement syslog (https://www.kernel.org/doc/html/latest/core-api/printk-basics.html) */
             break;
+        case SYS_tkill:
+            return_value = sys_tkill((pid_t) ebx, ecx);
+            break;
+
+        case SYS_gettid:
+            return_value = task_get_pid();
+            break;
+
+        case SYS_usleep:
+            task_sleep(ebx / 1000); 
+            break;
+
         default:
             klog(ERROR, "Unkown syscall !\n");
-            return 1;
+            return_value = 1;
     }
 
-    return 0;
+    return return_value;
 }

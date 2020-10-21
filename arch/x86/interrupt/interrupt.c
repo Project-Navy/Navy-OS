@@ -17,7 +17,6 @@
 
 
 #include "kernel/log.h"
-#include "kernel/abi/syscall.h"
 
 #include "arch/arch.h"
 
@@ -30,9 +29,12 @@
 #include "arch/x86/memory/task.h"
 
 #include <stdlib.h>
-#include <Navy/macro.h>
 #include <stdint.h>
 
+#include <Navy/macro.h>
+#include <Navy/syscall.h>
+
+unsigned int tick = 0;
 
 const char *exceptions[32] = {
     "Division by zero",
@@ -109,6 +111,12 @@ backtrace(uint32_t * ebp)
     }
 }
 
+unsigned int
+fetch_tick(void)
+{
+    return tick;
+}
+
 uint32_t
 interrupts_handler(uint32_t esp, struct InterruptStackFrame stackframe)
 {
@@ -149,8 +157,9 @@ interrupts_handler(uint32_t esp, struct InterruptStackFrame stackframe)
     {
         uint8_t irq_nbr = stackframe.intno - 32;
 
-        if (irq_nbr == 0) 
+        if (irq_nbr == 0)
         {
+            tick += 1;
             esp = sched(esp);
         }
 
@@ -163,7 +172,12 @@ interrupts_handler(uint32_t esp, struct InterruptStackFrame stackframe)
 
     else if (stackframe.intno == 69)
     {
-        syscall(stackframe.eax, stackframe.ebx, stackframe.ecx);
+        stackframe.eax = syscall(stackframe.eax, stackframe.ebx, stackframe.ecx);
+    }
+
+    else if (stackframe.intno == 70)
+    {
+        esp = sched(esp);
     }
 
     PIC_sendEOI(stackframe.intno);

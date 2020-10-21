@@ -29,10 +29,12 @@ void
 kmain(uintptr_t addr, uint32_t magic)
 {
     BootInfo info;
+
     init_serial();
 
     assert(magic == MULTIBOOT2_BOOTLOADER_MAGIC);
 
     multiboot2_parse_header(&info, addr);
+
     init_arch(&info);
 }

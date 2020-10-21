@@ -96,6 +96,7 @@ void memory_map_identity(void *, Range, uint8_t);
 void virtual_free(void *, Range);
 void address_space_switch(void *);
 void *kernel_address_space();
+void memory_free(void *, Range);
 
 Range virtual_alloc(void *, Range, uint8_t);
 

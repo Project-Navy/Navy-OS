@@ -15,12 +15,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <unistd.h>
+#include <Navy/syscall.h>
 
-#ifndef _NAVY_ABI_SYSCALL_H
-#define _NAVY_ABI_SYSCALL_H
-
-#include <stdint.h>
-
-uint32_t syscall(uint32_t, uint32_t, uint32_t);
-
-#endif
+unsigned int 
+usleep(unsigned int usec)
+{
+    syscall(SYS_usleep, usec, 0);
+    return 0;
+}

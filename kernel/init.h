@@ -16,7 +16,7 @@
  */
 
 #ifndef _NAVY_INIT_H
-#define _NAVY_INIT_H 
+#define _NAVY_INIT_H
 
 void init(void);
 void a(void);

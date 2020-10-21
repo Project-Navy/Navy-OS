@@ -22,17 +22,22 @@
 
 #include <stdlib.h>
 #include <string.h>
+
 #include <Navy/assert.h>
 
 #define STACK_SIZE 0x1000
 
-task_t tasks[4];
+task_t tasks[5];
+
+int pid_limit = 5;
 int pid = -1;
 int new_pid = 0;
 
 int
 create_task(char *name, void (*thread)())
 {
+    disable_interrupts();
+
     int last_pid;
     uintptr_t addr;
     task_t *task;
@@ -40,19 +45,25 @@ create_task(char *name, void (*thread)())
 
     assert(strlen(name) < 32);
 
-    disable_interrupts();
     task = (task_t *) malloc(sizeof(task_t));
     memory_alloc(kernel_address_space(), STACK_SIZE, MEMORY_CLEAR, &addr);
 
-    task->stack = addr + STACK_SIZE;
+    task->stack_range.begin = addr;
+    task->stack_range.size = STACK_SIZE;
 
-    stackframe = (struct InterruptStackFrame *) (addr - sizeof(struct InterruptStackFrame));
+    task->stack = addr + STACK_SIZE;
+    task->address_space = kernel_address_space();   /* It's temporary */
+
+    stackframe =
+        (struct InterruptStackFrame *) (addr - sizeof(struct InterruptStackFrame));
 
     stackframe->eflags = 0x202;
     stackframe->cs = 0x08;
     stackframe->eip = (uint32_t) thread;
 
-    /* Pusha */
+    /*
+     * Pusha 
+     */
     stackframe->edi = 0;
     stackframe->esi = 0;
     stackframe->ebp = 0;
@@ -62,30 +73,100 @@ create_task(char *name, void (*thread)())
     stackframe->ebx = 0;
     stackframe->eax = 0;
 
-    /* Data segments */
+    /*
+     * Data segments 
+     */
     stackframe->ds = 0x10;
     stackframe->es = 0x10;
     stackframe->fs = 0x10;
     stackframe->gs = 0x10;
 
-    task->state = 1;
+    task->state = RUNNING;
     task->stack = (unsigned int) stackframe;
 
     task->thread = thread;
-    strncpy(task->name,(const char *) name, strlen((const char *) name));
+    strncpy(task->name, (const char *) name, strlen((const char *) name));
 
     tasks[new_pid] = *task;
     last_pid = new_pid++;
 
     enable_interrupts();
-
     return last_pid;
 }
 
-void 
+void
 init_tasking(void)
 {
     pid = create_task("System", NULL);
+    create_task("Task Slayer", task_slayer);
+}
+
+int
+kill_task(int pid_to_kill)
+{
+    if (pid_to_kill > new_pid)
+    {
+        return -1;
+    }
+    
+    tasks[pid_to_kill].state = GONNADIE;
+    return 0;
+}
+
+uint32_t 
+task_get_pid(void)
+{
+    return pid;
+}
+
+void 
+slay_task(task_t *task)
+{
+    disable_interrupts();
+
+    memory_free(kernel_address_space(), task->stack_range);
+    task->state = DEAD;
+
+    klog(LOG, "%s has been slayed\n", task->name);
+
+    enable_interrupts();
+}
+
+void
+task_slayer(void)
+{
+    int i;
+
+    while (1)
+    {
+        task_sleep(100);
+
+        for (i = 0; i < new_pid; i++)
+        {
+            if(tasks[i].state == GONNADIE)
+            {
+                slay_task(&tasks[i]);
+            }
+        }
+
+    }
+}
+
+void 
+task_yield(void)
+{
+    __asm__("int $70");
+}
+
+void 
+task_sleep(uint32_t milli)
+{
+    disable_interrupts();
+    tasks[pid].state = SLEEPING;
+    tasks[pid].wakeup_tick = milli + fetch_tick();
+    enable_interrupts();
+
+    task_yield();
 }
 
 unsigned int
@@ -96,16 +177,23 @@ sched(unsigned int context)
         return context;
     }
 
-
     tasks[pid].stack = context;
-    pid++;
 
-    if (pid >= new_pid)
+    do
     {
-        pid = 0;
-    }
+        pid++;
 
-    klog(OK, "Switching to %s ESP: %x\n", tasks[pid].name, context);
+        if (pid >= new_pid)
+        {
+            pid = 0;
+        }
+
+        if (tasks[pid].state == SLEEPING && tasks[pid].wakeup_tick <= fetch_tick())
+        {
+            tasks[pid].state = RUNNING;
+        }
+
+    } while (tasks[pid].state != RUNNING); 
+
     return tasks[pid].stack;
 }
-

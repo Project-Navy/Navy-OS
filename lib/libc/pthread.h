@@ -15,11 +15,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "kernel/log.h"
-#include <Navy/macro.h>
+#ifndef _NAVY_LIBC_PTHREAD_H_
+#define _NAVY_LIBC_PTHREAD_M_
 
-void
-__assert(const char *exp, const char *file, const char *func, int line)
-{
-    panic("Assert failed: %s in %s (%s line %d)\n", exp, file, func, line);
-}
+#include <stdint.h>
+
+typedef uint32_t pthread_t;
+
+void pthread_exit(void *);
+pthread_t pthread_self(void);
+
+#endif

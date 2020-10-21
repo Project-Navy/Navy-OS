@@ -19,29 +19,45 @@
 #include "kernel/log.h"
 #include "kernel/ascii.h"
 
-void 
+#include <pthread.h>
+#include <unistd.h>
+
+void
 a(void)
 {
-    while(1)
+    size_t i;
+
+    for (i = 0; i < 10; i++)
     {
-        klog(OK, "A");
+        klog(OK, "[ %d ] A\n", i);
+        usleep(500000);
     }
+
+    pthread_exit("A"); 
+    for(;;);
+
 }
 
-void 
+void
 b(void)
 {
-    while(1)
+    size_t i;
+
+    for (i = 0; i < 20; i++)
     {
-        klog(OK, "B");
+        klog(OK, "[ %d ] B\n", i);
+        usleep(500000);
     }
+
+    pthread_exit("B");
+    for(;;);
 }
 
-void 
+void
 init(void)
 {
     klog(NONE, ascii_art);
 
     vga_print(ascii_art);
-    for(;;);
+    for (;;);
 }
