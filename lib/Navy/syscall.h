@@ -20,6 +20,7 @@
 #define _NAVY_ABI_SYSCALL_H
 
 #include <stdint.h>
+#include <Navy/macro.h>
 
 typedef enum SYSCALL
 {
