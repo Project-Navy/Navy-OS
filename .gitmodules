@@ -1,0 +1,3 @@
+[submodule "third-party/limine"]
+	path = third-party/limine
+	url = git@github.com:Project-Navy/limine.git
