@@ -23,10 +23,12 @@
 #include <stddef.h>
 #include <Navy/libmultiboot.h>
 
-#if defined(__i386__)
-#define PAGE_SIZE (4096)
-#endif
+#if defined(__i386__) 
 
+#include "arch/x86/x86.h" 
+#define PAGE_SIZE (4096)
+
+#else
 void debug_print(const char *);
 void debug_putc(const char);
 void debug_clear(void);
@@ -37,8 +39,6 @@ void vga_printerr(const char *);
 void vga_putc(char c);
 void disable_vga_cursor(void);
 
-void init_arch(BootInfo *);
-
 void breakpoint(void);
 void hlt(void);
 void disable_interrupts(void);
@@ -48,6 +48,7 @@ void panic(char *, ...);
 
 unsigned char kbd_getc(void);
 char kbd_lastKeyCode(void);
-bool is_page_aligned(size_t);
+#endif
 
+void init_arch(BootInfo *);
 #endif

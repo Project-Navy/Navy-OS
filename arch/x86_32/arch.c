@@ -15,12 +15,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _NAVY_X86_A20_H
-#define _NAVY_X86_A20_H
 
-#include <stdbool.h>
+#include "arch/arch.h"
 
-extern bool check_a20();
-void init_a20();
+#include "arch/x86_32/interrupt/idt.h"
+#include "arch/x86_32/memory/gdt.h"
+#include "arch/x86_32/memory/virtual.h"
+#include "arch/x86_32/memory/task.h"
 
-#endif
+#include "kernel/log.h"
+#include <Navy/libmultiboot.h>
+
+void
+init_arch(BootInfo * info)
+{
+    init_x86(info);
+    init_paging(info);
+    init_term();
+
+    init_gdt();
+    klog(OK, "GDT loaded\n");
+
+    init_idt();
+    klog(OK, "IDT loaded\n");
+
+    init_tasking();
+}
+

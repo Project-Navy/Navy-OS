@@ -15,31 +15,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include "arch/arch.h"
+#include "arch/x86/x86.h"
+#include "arch/x86/acpi.h"
+#include "arch/x86/rsdt.h"
+
 #include "arch/x86/device/vga.h"
 #include "arch/x86/device/keyboard.h"
 #include "arch/x86/device/serial.h"
 #include "arch/x86/device/ps2.h"
 #include "arch/x86/device/pit.h"
 
-#include "arch/x86/interrupt/idt.h"
 #include "arch/x86/interrupt/apic.h"
 #include "arch/x86/interrupt/pic.h"
-
-#include "arch/x86/acpi.h"
-#include "arch/x86/rsdt.h"
 #include "arch/x86/io.h"
 
-#include "arch/x86/memory/a20.h"
-#include "arch/x86/memory/gdt.h"
-#include "arch/x86/memory/virtual.h"
-#include "arch/x86/memory/task.h"
-
 #include "kernel/log.h"
-#include "kernel/init.h"
-
-#include <Navy/macro.h>
 #include <Navy/libmultiboot.h>
 #include <Navy/assert.h>
 
@@ -47,6 +38,25 @@
 #include <stdarg.h>
 
 int32_t interrupt_lock = 0;
+
+void 
+init_x86(BootInfo *info)
+{
+    struct ACPISDTHeader *rsdt;
+
+    rsdt = init_acpi(info);
+    klog(OK, "ACPI initialised\n");
+
+    init_ps2(rsdt);
+
+    init_pic();
+    klog(OK, "PIC initialised\n");
+
+    init_pit(1000);
+    klog(OK, "PIT initialised\n");
+
+    return;
+}
 
 void
 debug_print(const char *msg)
@@ -73,50 +83,10 @@ init_serial(void)
     serial_print(COM1, "\033c");
 }
 
-void
-init_arch(BootInfo * info)
+void 
+init_term(void)
 {
-    struct ACPISDTHeader *rsdt;
-    uint32_t pid_a;
-
-    init_gdt();
-    klog(OK, "GDT loaded\n");
-
-    init_idt();
-    klog(OK, "IDT loaded\n");
-
-    rsdt = init_acpi(info);
-    klog(OK, "ACPI initialised\n");
-
-    init_ps2(rsdt);
-
-    init_pic();
-    klog(OK, "PIC initialised\n");
-
-    init_pit(1000);
-    klog(OK, "PIT initialised\n");
-
-    if (check_a20())
-    {
-        klog(OK, "A20 Line already enabled\n");
-    }
-
-    else
-    {
-        init_a20();
-        assert(check_a20());
-    }
-
-    init_paging(info);
     term_init();
-
-    init_tasking();
-
-    pid_a = create_task("A", a);
-    create_task("B", b);
-
-    __unused(pid_a);
-    klog(OK, "A returns: %s\n", (char *) task_wait(pid_a)); 
 }
 
 void
@@ -137,7 +107,6 @@ disable_interrupts(void)
     __asm__("cli");
     interrupt_lock++;
 }
-
 
 void
 enable_interrupts(void)

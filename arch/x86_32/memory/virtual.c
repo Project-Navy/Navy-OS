@@ -16,7 +16,7 @@
  */
 
 
-#include "arch/x86/memory/virtual.h"
+#include "arch/x86_32/memory/virtual.h"
 #include "kernel/memory/physical.h"
 #include "kernel/log.h"
 

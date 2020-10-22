@@ -18,7 +18,8 @@
 
 #include "arch/x86/device/vga.h"
 #include "arch/x86/io.h"
-#include "arch/x86/memory/virtual.h"
+
+#include "arch/x86_32/memory/virtual.h" /* TODO */
 
 #include <Navy/range.h>
 #include <Navy/assert.h>

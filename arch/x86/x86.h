@@ -15,35 +15,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "arch/x86/memory/a20.h"
-#include "arch/x86/device/ps2.h"
-#include "arch/x86/io.h"
-#include "arch/arch.h"
+#ifndef _NAVY_X86_H_
+#define _NAVY_X86_H_
 
-#include "kernel/log.h"
+#include <Navy/libmultiboot.h>
 
-void
-init_a20(void)
-{
-    uint8_t a;
+void init_x86(BootInfo *info);
 
-    disable_interrupts();
-    ps2_wait();
+void debug_print(const char *);
+void debug_putc(const char);
+void debug_clear(void);
+void init_serial(void);
+void init_term(void);
 
-    outb(PS2_REG, 0xad);
-    ps2_wait();
+void vga_print(const char *);
+void vga_printerr(const char *);
+void vga_putc(char c);
+void disable_vga_cursor(void);
 
-    a = inb(PS2_DATA);
-    ps2_wait();
+void breakpoint(void);
+void hlt(void);
+void disable_interrupts(void);
+void enable_interrupts(void);
+void reboot(void);
+void panic(char *, ...);
 
-    outb(PS2_REG, 0xd1);
-    ps2_wait();
+unsigned char kbd_getc(void);
+char kbd_lastKeyCode(void);
 
-    outb(PS2_REG, a | 2);
-    ps2_wait();
+bool is_page_aligned(size_t);
 
-    outb(PS2_REG, 0xae);
-    enable_interrupts();
-
-    return;
-}
+#endif

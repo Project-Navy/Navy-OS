@@ -20,7 +20,7 @@
 
 #include "arch/arch.h"
 #include "kernel/log.h"
-#include "arch/x86/memory/virtual.h"
+#include "arch/x86_32/memory/virtual.h"
 
 bool lock = false;
 

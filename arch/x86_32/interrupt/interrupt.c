@@ -24,9 +24,10 @@
 #include "arch/x86/device/keyboard.h"
 #include "arch/x86/interrupt/apic.h"
 #include "arch/x86/interrupt/pic.h"
-#include "arch/x86/interrupt/interrupt.h"
-#include "arch/x86/memory/virtual.h"
-#include "arch/x86/memory/task.h"
+
+#include "arch/x86_32/interrupt/interrupt.h"
+#include "arch/x86_32/memory/virtual.h"
+#include "arch/x86_32/memory/task.h"
 
 #include <stdlib.h>
 #include <stdint.h>

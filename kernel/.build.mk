@@ -1,8 +1,20 @@
 KERNEL_SOURCES = \
 	$(wildcard kernel/*/*.c) \
 	$(wildcard kernel/*.c) \
-	$(wildcard arch/x86/*.c) \
-	$(wildcard arch/x86/*/*.c) \
+	$(wildcard arch/$(BUILD_ARCH)/*.c) \
+	$(wildcard arch/$(BUILD_ARCH)/*/*.c) \
+
+ifeq ($(BUILD_ARCH), x86_32)
+	KERNEL_SOURCES  += \
+		$(wildcard arch/x86/*.c) \
+		$(wildcard arch/x86/*/*.c)
+endif
+
+ifeq ($(BUILD_ARCH), x86_64)
+	KERNEL_SOURCES  += \
+		$(wildcard arch/x86/*.c) \
+		$(wildcard arch/x86/*/*.c)
+endif
 
 KERNEL_ASSEMBLY_SOURCES = \
 	$(wildcard arch/*/*.asm) \
@@ -47,4 +59,4 @@ $(BUILD_DIRECTORY)/arch/%.asm.o: arch/%.asm
 $(KERNEL_BINARY): $(KERNEL_OBJECTS)
 	$(DIRECTORY_GUARD)
 	@echo [KERNEL] [LD] $(KERNEL_BINARY)
-	@$(CC) $(LDFLAGS) -T arch/x86/link.ld -o $@ -ffreestanding $^ -nostdlib -lgcc
+	@$(CC) $(LDFLAGS) -T arch/x86_32/link.ld -o $@ -ffreestanding $^ -nostdlib -lgcc

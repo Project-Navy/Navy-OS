@@ -18,7 +18,7 @@
 
 #include "kernel/log.h"
 
-#include "arch/x86/memory/task.h"
+#include "arch/x86_32/memory/task.h"
 
 #include <stdarg.h>
 
