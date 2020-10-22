@@ -31,25 +31,11 @@ all: $(KERNEL_BINARY)
 
 format:
 	sh ./format.sh
-	
-run-qemu: 
-	sh ./make-iso.sh
-	qemu-system-x86_64 -cdrom navy.iso -serial stdio -smp cores=4 
-
-run-gdb:
-	sh ./make-iso.sh
-	qemu-system-x86_64 -s -S -cdrom navy.iso -serial stdio -smp cores=4 
-
-run-debug:
-	sh ./make-iso.sh
-	qemu-system-x86_64 -cdrom navy.iso -serial stdio -smp cores=4 --no-shutdown --no-reboot
-
-run-bochs:
-	sh ./make-iso.sh
-	bochs -q
 
 clean:
 	rm -rf build/
+	rm -rf kernel.elf
+	rm -rf navy.*
 
 .PHONY: run-bochs
 .PHONY: run-qemu

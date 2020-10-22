@@ -8,12 +8,13 @@ ifeq ($(BUILD_ARCH), x86_32)
 	KERNEL_SOURCES  += \
 		$(wildcard arch/x86/*.c) \
 		$(wildcard arch/x86/*/*.c)
-endif
 
-ifeq ($(BUILD_ARCH), x86_64)
+else ifeq ($(BUILD_ARCH), x86_64)
 	KERNEL_SOURCES  += \
 		$(wildcard arch/x86/*.c) \
 		$(wildcard arch/x86/*/*.c)
+else 
+	$(error "$(BUILD_ARCH) is not supported by NavyOS (yet)")
 endif
 
 KERNEL_ASSEMBLY_SOURCES = \
@@ -27,7 +28,7 @@ KERNEL_LIBRARIES_SOURCES = \
 	$(wildcard lib/liballoc/*.c)
 	
 
-KERNEL_BINARY = kernel.bin
+KERNEL_BINARY = kernel.elf
 
 KERNEL_OBJECTS = \
 	$(patsubst %.c, $(BUILD_DIRECTORY)/%.o, $(KERNEL_SOURCES)) \
@@ -59,4 +60,4 @@ $(BUILD_DIRECTORY)/arch/%.asm.o: arch/%.asm
 $(KERNEL_BINARY): $(KERNEL_OBJECTS)
 	$(DIRECTORY_GUARD)
 	@echo [KERNEL] [LD] $(KERNEL_BINARY)
-	@$(CC) $(LDFLAGS) -T arch/x86_32/link.ld -o $@ -ffreestanding $^ -nostdlib -lgcc
+	@$(CC) $(LDFLAGS) -T arch/x86_32/link.ld -o $@ -ffreestanding $^ -nostdlib

@@ -1,5 +1,5 @@
 # kernel binary
-kernel.bin
+kernel.elf
 build/
 
 # Debug files
@@ -10,6 +10,7 @@ peda-session-kernel.bin.txt
 
 # Iso 
 navy.iso
+navy.img
 isodir/
 
 # GNU Indent Backup

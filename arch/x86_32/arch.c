@@ -24,10 +24,14 @@
 #include "arch/x86_32/memory/task.h"
 
 #include "kernel/log.h"
+
 #include <Navy/libmultiboot.h>
+#include <Navy/assert.h>
+
+#include <multiboot2.h>
 
 void
-init_arch(BootInfo * info)
+init_arch(BootInfo *info)
 {
     init_x86(info);
     init_paging(info);
@@ -42,3 +46,22 @@ init_arch(BootInfo * info)
     init_tasking();
 }
 
+void 
+boot_multiboot(uintptr_t addr, uint32_t magic)
+{
+    BootInfo boot_info;
+
+    assert(magic == MULTIBOOT2_BOOTLOADER_MAGIC);
+    multiboot2_parse_header(&boot_info, addr);
+    
+    init_arch(&boot_info);
+}
+
+void 
+boot_stivale(void)
+{
+    init_serial(); 
+    klog(ERROR, "I can boot !\n");
+
+    hlt();
+}
