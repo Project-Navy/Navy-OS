@@ -22,6 +22,7 @@
 #include <stddef.h>
 #include <Navy/range.h>
 #include <multiboot2.h>
+#include <stivale2.h>
 
 #define LIMIT_CMD_SIZE 256
 #define LIMIT_MEMORY_MAP_SIZE 64
@@ -58,5 +59,6 @@ struct BOOTINFO
 typedef struct BOOTINFO BootInfo;
 
 void multiboot2_parse_header(BootInfo *, uintptr_t);
+void stivale2_parse_header(BootInfo *, struct stivale2_struct *);
 
 #endif

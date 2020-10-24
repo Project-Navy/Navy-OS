@@ -29,9 +29,11 @@
 #include <Navy/assert.h>
 
 #include <multiboot2.h>
+#include <stivale2.h>
+#include <string.h>
 
 void
-init_arch(BootInfo *info)
+init_arch(BootInfo * info)
 {
     init_x86(info);
     init_paging(info);
@@ -46,22 +48,24 @@ init_arch(BootInfo *info)
     init_tasking();
 }
 
-void 
+void
 boot_multiboot(uintptr_t addr, uint32_t magic)
 {
     BootInfo boot_info;
 
     assert(magic == MULTIBOOT2_BOOTLOADER_MAGIC);
     multiboot2_parse_header(&boot_info, addr);
-    
+
     init_arch(&boot_info);
 }
 
-void 
-boot_stivale(void)
+void
+boot_stivale(struct stivale2_struct *info)
 {
-    init_serial(); 
-    klog(ERROR, "I can boot !\n");
+    BootInfo boot_info;
 
-    hlt();
+    assert(strcmp(info->bootloader_brand, "Limine") == 0);
+    stivale2_parse_header(&boot_info, info);
+
+    init_arch(&boot_info);
 }

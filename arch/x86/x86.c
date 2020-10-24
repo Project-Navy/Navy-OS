@@ -39,8 +39,8 @@
 
 int32_t interrupt_lock = 0;
 
-void 
-init_x86(BootInfo *info)
+void
+init_x86(BootInfo * info)
 {
     struct ACPISDTHeader *rsdt;
 
@@ -83,7 +83,7 @@ init_serial(void)
     serial_print(COM1, "\033c");
 }
 
-void 
+void
 init_term(void)
 {
     term_init();

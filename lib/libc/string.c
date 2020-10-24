@@ -178,3 +178,37 @@ strcpy(char *dest, const char *src)
 
     return dest;
 }
+
+int 
+strcmp(const char *s1, const char *s2)
+{
+    size_t max_length;
+    size_t i;
+    int if_eq;
+
+    if (strlen(s1) > strlen(s2))
+    {
+        max_length = strlen(s2);
+        if_eq = 100;
+    }
+    else if (strlen(s1) < strlen(s2))
+    {
+        max_length = strlen(s1);
+        if_eq = -100;
+    }
+    else 
+    {
+        max_length = strlen(s1);
+        if_eq = 0;
+    }
+
+    for (i = 0; i < max_length; i++)
+    {
+        if (s1[i] < s2[i] || s1[i] > s2[i])
+        {
+            return s1[i] - s2[i];
+        }
+    }
+
+    return if_eq;
+}

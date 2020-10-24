@@ -5,9 +5,9 @@ SECTIONS
 	. = 1M;
         __start = .;
 
-    .stivalehdr ALIGN(4K) :
+    .stivale2hdr ALIGN(4K) :
     {
-        *(.stivalehdr)
+        *(.stivale2hdr)
     }
 
 	.text BLOCK(4K) : ALIGN(4K)

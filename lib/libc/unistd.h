@@ -16,7 +16,7 @@
  */
 
 #ifndef _NAVY_LIBC_UNISTD_H_
-#define _NAVY_LIBC_UNISTD_H_ 
+#define _NAVY_LIBC_UNISTD_H_
 
 unsigned int usleep(unsigned int);
 

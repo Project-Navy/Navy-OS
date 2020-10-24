@@ -33,7 +33,7 @@ a(void)
         usleep(500000);
     }
 
-    pthread_exit("I'm dead"); 
+    pthread_exit("I'm dead");
 }
 
 void

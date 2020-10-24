@@ -20,7 +20,7 @@
 
 #include <Navy/libmultiboot.h>
 
-void init_x86(BootInfo *info);
+void init_x86(BootInfo * info);
 
 void debug_print(const char *);
 void debug_putc(const char);

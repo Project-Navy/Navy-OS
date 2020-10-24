@@ -7,19 +7,20 @@ DIRECTORY_GUARD=@mkdir -p $(@D)
 BUILD_ARCH ?= x86_32
 
 CFLAGS := \
-    -MD			                \
-    -Wall		                \
-    -Wextra		                \
-    -Werror                     \
-    -I.                         \
-    -Ilib/multiboot             \
-	-Ilib/libc					\
-	-Ilib						\
-    -ffreestanding	            \
-    -g			                \
-	-ansi						\
-    -nostdlib			        \
-    -pedantic                   \
+    -MD			                 \
+    -Wall		                 \
+    -Wextra		                 \
+    -Werror                      \
+    -I.                          \
+    -Ilib/multiboot              \
+	-Ithird-party/limine/stivale \
+	-Ilib/libc					 \
+	-Ilib						 \
+    -ffreestanding	             \
+    -g			                 \
+	-ansi						 \
+    -nostdlib			         \
+    -pedantic                    \
     -pedantic-errors            
 
 LDFLAGS :=

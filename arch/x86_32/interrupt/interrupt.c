@@ -173,7 +173,8 @@ interrupts_handler(uint32_t esp, struct InterruptStackFrame stackframe)
 
     else if (stackframe.intno == 69)
     {
-        stackframe.eax = syscall(stackframe.eax, stackframe.ebx, stackframe.ecx, stackframe.edx);
+        stackframe.eax =
+            syscall(stackframe.eax, stackframe.ebx, stackframe.ecx, stackframe.edx);
     }
 
     else if (stackframe.intno == 70)

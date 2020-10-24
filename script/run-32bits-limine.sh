@@ -11,5 +11,10 @@ else
 fi
 
 $(dirname $0)/disk-limine.sh -r
-qemu-system-x86_64 -drive format=raw,file=$otherpath/navy.img -serial stdio
+
+if [ $1 = "-d" ]; then
+    qemu-system-i386 -s -S -drive format=raw,file=$otherpath/navy.img -serial stdio -m 128M -enable-kvm -display sdl 
+else
+    qemu-system-i386 -drive format=raw,file=$otherpath/navy.img -serial stdio -m 128M -enable-kvm -display sdl 
+fi
 

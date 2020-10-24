@@ -27,14 +27,14 @@
 
 #define STACK_SIZE 0x1000
 
-task_t tasks[5] = {0};
+task_t tasks[5] = { 0 };
 
 int pid_limit = 5;
 int pid = -1;
 int new_pid = 0;
 
 int
-create_task(char *name, void (*thread)()) 
+create_task(char *name, void (*thread)())
 {
     disable_interrupts();
 
@@ -97,10 +97,10 @@ create_task(char *name, void (*thread)())
     return last_pid;
 }
 
-void 
+void
 idle(void)
 {
-    while(1)
+    while (1)
     {
         hlt();
     }
@@ -124,14 +124,14 @@ exit_task(int return_value)
     __builtin_unreachable();
 }
 
-uint32_t 
+uint32_t
 task_get_pid(void)
 {
     return pid;
 }
 
-void 
-slay_task(task_t *task)
+void
+slay_task(task_t * task)
 {
     disable_interrupts();
 
@@ -154,7 +154,7 @@ task_slayer(void)
 
         for (i = 0; i < new_pid; i++)
         {
-            if(tasks[i].state == GONNADIE)
+            if (tasks[i].state == GONNADIE)
             {
                 slay_task(&tasks[i]);
             }
@@ -163,13 +163,13 @@ task_slayer(void)
     }
 }
 
-void 
+void
 task_yield(void)
 {
     __asm__("int $70");
 }
 
-void 
+void
 task_sleep(uint32_t milli)
 {
     disable_interrupts();
@@ -199,7 +199,7 @@ task_wait(uint32_t wait_pid)
     return tasks[pid].return_value;
 }
 
-void 
+void
 update_task_state(void)
 {
     int i;
@@ -219,7 +219,7 @@ update_task_state(void)
             }
         }
 
-        if (tasks[i].state == SLEEPING) 
+        if (tasks[i].state == SLEEPING)
         {
             if (tasks[i].wakeup_tick <= fetch_tick())
             {
@@ -249,7 +249,8 @@ sched(unsigned int context)
         {
             pid = 0;
         }
-    } while (tasks[pid].state != RUNNING); 
+    }
+    while (tasks[pid].state != RUNNING);
 
     return tasks[pid].stack;
 }

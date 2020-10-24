@@ -26,10 +26,10 @@ pthread_exit(void *retptr)
 {
     __unused(retptr);
     syscall(SYS_texit, (uint32_t) retptr, 0, 0);
-    for(;;);
+    for (;;);
 }
 
-pthread_t 
+pthread_t
 pthread_self(void)
 {
     return syscall(SYS_gettid, 0, 0, 0);

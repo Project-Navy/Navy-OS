@@ -18,7 +18,7 @@
 #include <unistd.h>
 #include <Navy/syscall.h>
 
-unsigned int 
+unsigned int
 usleep(unsigned int usec)
 {
     syscall(SYS_usleep, usec, 0, 0);

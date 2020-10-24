@@ -28,7 +28,7 @@
 void
 sys_texit(int return_value)
 {
-    exit_task(return_value);    
+    exit_task(return_value);
 }
 
 pid_t
@@ -36,7 +36,7 @@ sys_gettid(void)
 {
     pid_t pid;
 
-    pid = task_get_pid();    
+    pid = task_get_pid();
 
     return pid;
 }
@@ -45,13 +45,17 @@ uint32_t
 syscall(uint32_t eax, uint32_t ebx, uint32_t ecx, uint32_t edx)
 {
     uint32_t return_value = 0;
+
     __unused(edx);
 
     switch (eax)
     {
         case SYS_syslog:
             klog(ebx, (char *) ecx);
-            /* Implement syslog (https://www.kernel.org/doc/html/latest/core-api/printk-basics.html) */
+            /*
+             * Implement syslog
+             * (https://www.kernel.org/doc/html/latest/core-api/printk-basics.html) 
+             */
             break;
         case SYS_texit:
             sys_texit(ebx);
@@ -62,7 +66,7 @@ syscall(uint32_t eax, uint32_t ebx, uint32_t ecx, uint32_t edx)
             break;
 
         case SYS_usleep:
-            task_sleep(ebx / 1000); 
+            task_sleep(ebx / 1000);
             break;
 
         default:

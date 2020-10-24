@@ -55,14 +55,12 @@ align 8
 multiboot_end:
 ;;
  
-section .stivalehdr
+section .stivale2hdr 
 align 4
-    dq stack_top 
-    dw 0
-    dw 0
-    dw 0 
-    dw 0
     dq boot_stivale
+    dq stack_top 
+    dq 0
+    dq 0
 
 section .bss
     align 16

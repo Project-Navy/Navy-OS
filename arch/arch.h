@@ -23,9 +23,9 @@
 #include <stddef.h>
 #include <Navy/libmultiboot.h>
 
-#if defined(__i386__) 
+#if defined(__i386__)
 
-#include "arch/x86/x86.h" 
+#include "arch/x86/x86.h"
 #define PAGE_SIZE (4096)
 
 #else
