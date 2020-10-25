@@ -4,3 +4,7 @@
 [submodule "third-party/echfs"]
 	path = third-party/echfs
 	url = git@github.com:qword-os/echfs.git
+[submodule "./limine/"]
+	url = https://github.com/Project-Navy/limine
+[submodule "./echfs/"]
+	url = https://github.com/qword-os/echfs
