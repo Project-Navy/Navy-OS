@@ -20,8 +20,8 @@
 #include <Navy/libmultiboot.h>
 #include <multiboot2.h>
 
-void 
-stivale2_parse_mmap(BootInfo *info, struct stivale2_struct_tag_memmap *m)
+void
+stivale2_parse_mmap(BootInfo * info, struct stivale2_struct_tag_memmap *m)
 {
     Range range;
     MemoryMapEntry *entry;
@@ -41,7 +41,8 @@ stivale2_parse_mmap(BootInfo *info, struct stivale2_struct_tag_memmap *m)
             continue;
         }
 
-        if (mmap.type == STIVALE2_MMAP_USABLE || mmap.type == STIVALE2_MMAP_KERNEL_AND_MODULES)
+        if (mmap.type == STIVALE2_MMAP_USABLE
+            || mmap.type == STIVALE2_MMAP_KERNEL_AND_MODULES)
         {
             info->memory_usable += mmap.length;
         }
@@ -54,11 +55,13 @@ stivale2_parse_mmap(BootInfo *info, struct stivale2_struct_tag_memmap *m)
         align_range(&range);
 
         entry->range = range;
-        
+
         switch (mmap.type)
         {
             case STIVALE2_MMAP_USABLE:
-                /* FALLTROUGH */
+                /*
+                 * FALLTROUGH 
+                 */
             case STIVALE2_MMAP_KERNEL_AND_MODULES:
                 entry->type = MULTIBOOT_MEMORY_AVAILABLE;
                 break;
@@ -72,16 +75,16 @@ stivale2_parse_mmap(BootInfo *info, struct stivale2_struct_tag_memmap *m)
                 entry->type = MULTIBOOT_MEMORY_BADRAM;
                 break;
             default:
-               entry->type = MULTIBOOT_MEMORY_RESERVED;
-               break;
+                entry->type = MULTIBOOT_MEMORY_RESERVED;
+                break;
         }
 
         info->memory_map_size++;
     }
 }
 
-void 
-stivale2_parse_module(BootInfo *info, struct stivale2_struct_tag_modules *m)
+void
+stivale2_parse_module(BootInfo * info, struct stivale2_struct_tag_modules *m)
 {
     Module *module;
     Range range;
@@ -90,38 +93,39 @@ stivale2_parse_module(BootInfo *info, struct stivale2_struct_tag_modules *m)
     for (i = 0; i < m->module_count; i++)
     {
         struct stivale2_module me = m->modules[i];
+
         module = &info->modules[info->modules_size];
 
         range.begin = me.begin;
         range.size = me.end - me.begin;
         align_range(&range);
-        
+
         strncmp(module->cmd, (const char *) me.string, STIVALE2_MODULE_STRING_SIZE);
 
         info->modules_size++;
     }
 }
 
-void 
-stivale2_parse_header(BootInfo *info, struct stivale2_struct *stivale)
+void
+stivale2_parse_header(BootInfo * info, struct stivale2_struct *stivale)
 {
     struct stivale2_tag *tag = (struct stivale2_tag *) ((uintptr_t) stivale->tags);
 
     while (tag != NULL)
     {
-        switch(tag->identifier)
+        switch (tag->identifier)
         {
             case STIVALE2_STRUCT_TAG_RSDP_ID:
-                info->rsdp = (uintptr_t) ((struct stivale2_struct_tag_rsdp *) tag)->rsdp;                
+                info->rsdp = (uintptr_t) ((struct stivale2_struct_tag_rsdp *) tag)->rsdp;
                 break;
             case STIVALE2_STRUCT_TAG_MEMMAP_ID:
-                stivale2_parse_mmap(info, (struct stivale2_struct_tag_memmap *)tag);
+                stivale2_parse_mmap(info, (struct stivale2_struct_tag_memmap *) tag);
                 break;
             case STIVALE2_STRUCT_TAG_MODULES_ID:
-                stivale2_parse_module(info, (struct stivale2_struct_tag_modules *)tag);
+                stivale2_parse_module(info, (struct stivale2_struct_tag_modules *) tag);
                 break;
         }
 
-        tag = (struct stivale2_tag *)((uintptr_t) tag->next);
+        tag = (struct stivale2_tag *) ((uintptr_t) tag->next);
     }
 }

@@ -27,7 +27,7 @@
 #include "kernel/log.h"
 
 void
-multiboot2_parse_mmap(BootInfo *info, struct multiboot_tag_mmap *tag)
+multiboot2_parse_mmap(BootInfo * info, struct multiboot_tag_mmap *tag)
 {
     Range range;
     MemoryMapEntry *entry;
@@ -69,7 +69,7 @@ multiboot2_parse_mmap(BootInfo *info, struct multiboot_tag_mmap *tag)
 }
 
 void
-multiboot2_parse_module(BootInfo *info, struct multiboot_tag_module *m)
+multiboot2_parse_module(BootInfo * info, struct multiboot_tag_module *m)
 {
     Module *module;
     Range range;
@@ -92,7 +92,7 @@ multiboot2_parse_module(BootInfo *info, struct multiboot_tag_module *m)
 
 
 void
-multiboot2_parse_header(BootInfo *info, uintptr_t addr)
+multiboot2_parse_header(BootInfo * info, uintptr_t addr)
 {
     struct multiboot_tag *tag = (struct multiboot_tag *) addr + 8;
 

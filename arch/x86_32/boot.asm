@@ -27,7 +27,8 @@ MULTIBOOT_HEADER_TAG_OPTIONAL           equ 1
 MULTIBOOT_TAG_TYPE_FRAMEBUFFER          equ 8
 MULTIBOOT_HEADER_TAG_END                equ 0
 
-extern boot_stivale
+extern boot_stivale2
+extern boot_multiboot2
 
 section .multiboot
 align 8 
@@ -57,7 +58,8 @@ multiboot_end:
  
 section .stivale2hdr 
 align 4
-    dq boot_stivale
+__stivale2_header:
+    dq boot_stivale2
     dq stack_top 
     dq 0
     dq 0
@@ -84,8 +86,7 @@ section .text
     ; Push the magic value 
     push ebx
 
-	extern boot_multiboot
-	call boot_multiboot
+	call boot_multiboot2
  
 .hang:	hlt
 	jmp .hang

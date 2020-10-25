@@ -179,7 +179,7 @@ strcpy(char *dest, const char *src)
     return dest;
 }
 
-int 
+int
 strcmp(const char *s1, const char *s2)
 {
     size_t max_length;
@@ -196,7 +196,7 @@ strcmp(const char *s1, const char *s2)
         max_length = strlen(s1);
         if_eq = -100;
     }
-    else 
+    else
     {
         max_length = strlen(s1);
         if_eq = 0;

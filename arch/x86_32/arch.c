@@ -31,6 +31,8 @@
 #include <multiboot2.h>
 #include <stivale2.h>
 #include <string.h>
+#include <stddef.h>
+
 
 void
 init_arch(BootInfo * info)
@@ -49,7 +51,7 @@ init_arch(BootInfo * info)
 }
 
 void
-boot_multiboot(uintptr_t addr, uint32_t magic)
+boot_multiboot2(uintptr_t addr, uint32_t magic)
 {
     BootInfo boot_info;
 
@@ -60,7 +62,7 @@ boot_multiboot(uintptr_t addr, uint32_t magic)
 }
 
 void
-boot_stivale(struct stivale2_struct *info)
+boot_stivale2(struct stivale2_struct *info)
 {
     BootInfo boot_info;
 

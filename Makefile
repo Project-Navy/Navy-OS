@@ -18,10 +18,10 @@ CFLAGS := \
 	-Ilib						 \
     -ffreestanding	             \
     -g			                 \
-	-ansi						 \
     -nostdlib			         \
-    -pedantic                    \
-    -pedantic-errors            
+	-ansi						 \
+	-pedantic					 \
+	-Wpedantic
 
 LDFLAGS :=
 
