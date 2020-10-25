@@ -1,11 +1,6 @@
 #!/bin/sh
 
-path=""
-if [ $(dirname $0) = "." ]; then 
-    path=".." 
-else 
-    path="."
-fi
+path="$(dirname $0)/../"
 
 if [ -d isodir/ ]; then
 		rm -rf isodir/

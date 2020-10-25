@@ -1,12 +1,6 @@
 #!/bin/sh 
 
-path=""
-if [ $(dirname $0) = "." ]; then 
-    path=".." 
-else 
-    path="."
-fi
-
+path="$(dirname 0)/../"
 
 make -C $path/third-party/limine
 make -C $path/third-party/limine limine-install

@@ -1,15 +1,6 @@
 #!/bin/sh 
 
-path=""
-if [ $(dirname $0) = "." ]; then 
-    path=".." 
-else 
-    path="."
-fi
-
-if [ -f $path/navy.img ]; then 
-    rm -rf $path/navy.img
-fi
+path="$(dirname $0)/.."
 
 dd if=/dev/zero bs=1M count=0 seek=64 of=$path/navy.img
 parted -s $path/navy.img mklabel msdos 

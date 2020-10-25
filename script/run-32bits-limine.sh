@@ -1,20 +1,11 @@
 #!/bin/sh 
 
-path=""
-echo $(dirname $0)
-if [ $(dirname $0) = "." ]; then 
-    path="." 
-    otherpath=".."
-else 
-    path=".."
-    otherpath="."
+path="$(dirname $0)/../"
+
+if [ -f $path/navy.img ]; then 
+    rm navy.img
 fi
 
 $(dirname $0)/disk-limine.sh -r
-
-if [ $1 = "-d" ]; then
-    qemu-system-i386 -s -S -drive format=raw,file=$otherpath/navy.img -serial stdio -m 128M -enable-kvm -display sdl 
-else
-    qemu-system-i386 -drive format=raw,file=$otherpath/navy.img -serial stdio -m 128M -enable-kvm -display sdl 
-fi
+qemu-system-i386 -drive format=raw,file=$path/navy.img -serial stdio -m 128M -enable-kvm -display sdl 
 
