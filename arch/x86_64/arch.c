@@ -15,25 +15,39 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "arch/arch.h"
+#include "kernel/log.h"
 
-#ifndef _NAVY_ABI_SYSCALL_H
-#define _NAVY_ABI_SYSCALL_H
+#include <Navy/libmultiboot.h>
+#include <Navy/assert.h>
 
-#include <stdint.h>
-#include <Navy/macro.h>
+#include <stivale2.h>
+#include <string.h>
+#include <stddef.h>
 
-typedef enum SYSCALL
+typedef uint8_t stack[4096]; 
+static stack stacks[10] = {0};
+
+void boot_stivale2(struct stivale2_struct *);
+
+__attribute__((section(".stivale2hdr"), used))
+struct stivale2_header header2 = {
+    (uint64_t) boot_stivale2,
+    (uintptr_t) stacks[0] + sizeof(stack),
+    0,
+    0
+};
+
+void 
+boot_stivale2(struct stivale2_struct *info)
 {
-    SYS_syslog,
-    SYS_texit,
-    SYS_gettid,
-    SYS_usleep
-} Syscall;
+    BootInfo boot_info;
 
-typedef int pid_t;
+    assert(strcmp(info->bootloader_brand, "Limine") == 0);
+    stivale2_parse_header(&boot_info, info);
 
-__no_return void sys_texit(int);
-pid_t sys_getpid(void);
-uintptr_t syscall(uintptr_t, uintptr_t, uintptr_t, uintptr_t);
+    klog(OK, "Hello 64 bits !\n");
 
-#endif
+    hlt();
+    disable_interrupts();
+}

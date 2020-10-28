@@ -23,7 +23,7 @@
 #include <stddef.h>
 #include <Navy/libmultiboot.h>
 
-#if defined(__i386__)
+#if defined(__i386__) || defined(__x86_64__)
 
 #include "arch/x86/x86.h"
 #define PAGE_SIZE (4096)

@@ -19,7 +19,9 @@
 #include "arch/x86/device/vga.h"
 #include "arch/x86/io.h"
 
+#if defined(__i386__)
 #include "arch/x86_32/memory/virtual.h" /* TODO */
+#endif
 
 #include <Navy/range.h>
 #include <Navy/assert.h>
@@ -34,12 +36,14 @@ uint16_t *vga_buffer = (uint16_t *) 0xB8000;
 void
 term_init(void)
 {
+
+#if defined(__i386__)
     Range vga_range;
 
     vga_range.begin = 0xb8000;
     vga_range.size = 4096;
-
     memory_map_identity(kernel_address_space(), vga_range, MEMORY_NONE);
+#endif
     term_clear();
 }
 

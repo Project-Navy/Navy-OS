@@ -28,23 +28,31 @@
 void
 sys_texit(int return_value)
 {
+    __unused(return_value);
+    #if defined (__i386__)
     exit_task(return_value);
+    #else
+        for(;;);
+    #endif
 }
 
 pid_t
 sys_gettid(void)
 {
     pid_t pid;
-
+    #if defined(__i386__)
     pid = task_get_pid();
+    #else 
+        pid = 0;
+    #endif
 
     return pid;
 }
 
-uint32_t
-syscall(uint32_t eax, uint32_t ebx, uint32_t ecx, uint32_t edx)
+uintptr_t
+syscall(uintptr_t eax, uintptr_t ebx, uintptr_t ecx, uintptr_t edx)
 {
-    uint32_t return_value = 0;
+    uintptr_t return_value = 0;
 
     __unused(edx);
 
@@ -62,11 +70,15 @@ syscall(uint32_t eax, uint32_t ebx, uint32_t ecx, uint32_t edx)
             break;
 
         case SYS_gettid:
+            #if defined(__i386__)
             return_value = task_get_pid();
+            #endif
             break;
 
         case SYS_usleep:
+            #if defined (__i386__)
             task_sleep(ebx / 1000);
+            #endif
             break;
 
         default:

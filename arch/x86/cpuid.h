@@ -82,7 +82,7 @@ enum
 };
 
 
-void cpuid(int32_t, uint32_t *, uint32_t *);
+void cpuid(int32_t, uintptr_t*, uintptr_t*);
 int32_t cpuid_string(int32_t, uint32_t *);
 
 void cpuGetMSR(uint32_t, uint32_t *, uint32_t *);

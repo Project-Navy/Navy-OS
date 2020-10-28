@@ -21,7 +21,7 @@ CFLAGS := \
     -nostdlib			         \
 	-ansi						 \
 	-pedantic					 \
-	-Wpedantic
+	-Wpedantic					 
 
 LDFLAGS :=
 

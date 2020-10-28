@@ -18,8 +18,8 @@ else
 endif
 
 KERNEL_ASSEMBLY_SOURCES = \
-	$(wildcard arch/*/*.asm) \
-	$(wildcard arch/*/*/*.asm)
+	$(wildcard arch/$(BUILD_ARCH)/*.asm) \
+	$(wildcard arch/$(BUILD_ARCH)/*/*.asm)
 
 KERNEL_LIBRARIES_SOURCES = \
 	$(wildcard lib/libc/*.c) \
@@ -60,4 +60,4 @@ $(BUILD_DIRECTORY)/arch/%.asm.o: arch/%.asm
 $(KERNEL_BINARY): $(KERNEL_OBJECTS)
 	$(DIRECTORY_GUARD)
 	@echo [KERNEL] [LD] $(KERNEL_BINARY)
-	@$(CC) $(LDFLAGS) -T arch/x86_32/link.ld -o $@ -ffreestanding $^ -nostdlib
+	@$(CC) $(LDFLAGS) -T arch/$(BUILD_ARCH)/link.ld -o $@ -ffreestanding $^ -nostdlib

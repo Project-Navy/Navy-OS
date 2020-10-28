@@ -1,6 +1,8 @@
 #include <liballoc/liballoc.h>
 #include <liballoc/compat.h>
 
+#include <stdint.h>
+
 /**  Durand's Ridiculously Amazing Super Duper Memory functions.  */
 
 
@@ -229,7 +231,7 @@ split_tag(struct boundary_tag *tag)
     unsigned int remainder = tag->real_size - sizeof(struct boundary_tag) - tag->size;
 
     struct boundary_tag *new_tag =
-        (struct boundary_tag *) ((unsigned int) tag + sizeof(struct boundary_tag) +
+        (struct boundary_tag *) ((uintptr_t) tag + sizeof(struct boundary_tag) +
                                  tag->size);
 
     new_tag->magic = LIBALLOC_MAGIC;
@@ -413,7 +415,7 @@ liballoc_malloc(size_t size)
 
 
 
-    ptr = (void *) ((unsigned int) tag + sizeof(struct boundary_tag));
+    ptr = (void *) ((uintptr_t) tag + sizeof(struct boundary_tag));
 
 
 
@@ -444,7 +446,7 @@ liballoc_free(void *ptr)
     liballoc_lock();
 
 
-    tag = (struct boundary_tag *) ((unsigned int) ptr - sizeof(struct boundary_tag));
+    tag = (struct boundary_tag *) ((uintptr_t) ptr - sizeof(struct boundary_tag));
 
     if (tag->magic != LIBALLOC_MAGIC)
     {
@@ -572,7 +574,7 @@ liballoc_realloc(void *p, size_t size)
 
     if (liballoc_lock != NULL)
         liballoc_lock();
-    tag = (struct boundary_tag *) ((unsigned int) p - sizeof(struct boundary_tag));
+    tag = (struct boundary_tag *) ((uintptr_t) p - sizeof(struct boundary_tag));
     real_size = tag->size;
     if (liballoc_unlock != NULL)
         liballoc_unlock();

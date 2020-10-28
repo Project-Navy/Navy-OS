@@ -30,8 +30,8 @@
 bool
 check_apic(void)
 {
-    uint32_t eax;
-    uint32_t edx;
+    uintptr_t eax;
+    uintptr_t edx;
 
     cpuid(1, &eax, &edx);
     return edx & CPUID_FEAT_EDX_APIC;
@@ -52,10 +52,10 @@ init_apic(struct ACPISDTHeader *rsdt)
     struct MADT_NMI *nmi;
     struct MADT_LAPIC_IO *lapic_io;
     struct MADT *madt = (struct MADT *) find_SDT(rsdt, "APIC");
-    struct MADT_Entry *entry = (struct MADT_Entry *) ((uint32_t) & madt->entries);
+    struct MADT_Entry *entry = (struct MADT_Entry *) ((uintptr_t) & madt->entries);
 
 
-    while ((uint32_t) entry < (uint32_t) & madt->h + (uint32_t) madt->h.Length)
+    while ((uintptr_t) entry < (uintptr_t) & madt->h + (uintptr_t) madt->h.Length)
     {
         switch (entry->type)
         {
@@ -88,7 +88,7 @@ init_apic(struct ACPISDTHeader *rsdt)
                 panic("Unknown entry, CODE: %d\n", entry->type);
         }
 
-        entry = (struct MADT_Entry *) ((uint32_t) entry + entry->length);
+        entry = (struct MADT_Entry *) ((uintptr_t) entry + entry->length);
     }
 
     return;

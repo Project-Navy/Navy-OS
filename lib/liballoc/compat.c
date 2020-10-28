@@ -18,6 +18,8 @@
 #include <liballoc/compat.h>
 #include <stdbool.h>
 
+#include <Navy/macro.h>
+
 #include "arch/arch.h"
 #include "kernel/log.h"
 #include "arch/x86_32/memory/virtual.h"
@@ -42,8 +44,13 @@ void *
 liballoc_alloc(int pages)
 {
     uintptr_t addr;
+    __unused(pages);
 
-    memory_alloc(kernel_address_space(), pages * PAGE_SIZE, MEMORY_NONE, &addr);
+    #if defined(__i386__)
+        memory_alloc(kernel_address_space(), pages * PAGE_SIZE, MEMORY_NONE, &addr);
+    #else 
+        addr = 0;
+    #endif
     return (void *) addr;
 }
 
@@ -52,10 +59,17 @@ liballoc_free_(void *addr, int size)
 {
     Range range;
 
+    __unused(addr);
+    __unused(size);
+    __unused(range);
+
+    #if defined(__i386__)
+
     range.begin = (uintptr_t) addr;
     range.size = size;
 
     virtual_free(kernel_address_space(), range);
+    #endif
 
     return 0;
 }

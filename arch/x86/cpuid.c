@@ -19,7 +19,7 @@
 #include "arch/x86/cpuid.h"
 
 void
-cpuid(int32_t code, uint32_t * a, uint32_t * d)
+cpuid(int32_t code, uintptr_t *a, uintptr_t *d)
 {
     __asm__ volatile ("cpuid":"=a" (*a), "=d"(*d):"a"(code):"ecx", "ebx");
 }

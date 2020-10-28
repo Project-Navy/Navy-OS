@@ -42,7 +42,7 @@ struct ACPISDTHeader
 struct RSDT
 {
     struct ACPISDTHeader h;
-    uint32_t PointerToOtherSDT[];
+    uintptr_t PointerToOtherSDT[];
 };
 
 bool rsdt_checksum(struct ACPISDTHeader *);
