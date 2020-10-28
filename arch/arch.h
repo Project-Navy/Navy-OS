@@ -15,8 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef NAVY_ARCH_H
-#define NAVY_ARCH_H
+#ifndef _NAVY_ARCH_H_
+#define _NAVY_ARCH_H_
 
 #include <stdint.h>
 #include <stdbool.h>

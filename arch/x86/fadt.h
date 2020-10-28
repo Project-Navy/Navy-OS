@@ -15,8 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _NAVY_X86_FADT_H
-#define _NAVY_X86_FADT_H
+#ifndef _NAVY_X86_FADT_H_
+#define _NAVY_X86_FADT_H_
 
 #include "arch/x86/rsdt.h"
 #include <stdint.h>

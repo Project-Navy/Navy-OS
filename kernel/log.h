@@ -15,8 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _NAVY_KERNEL_LOG_H
-#define _NAVY_KERNEL_LOG_H
+#ifndef _NAVY_KERNEL_LOG_H_
+#define _NAVY_KERNEL_LOG_H_
 
 #include "arch/arch.h"
 #include <stdint.h>

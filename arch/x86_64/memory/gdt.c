@@ -44,21 +44,23 @@ init_gdt(void)
     gdtdesc.offset = (uintptr_t) & gdtentry[0];
 
     init_gdt_desc(0, 0, 0, 0, &gdtentry[0]);    /* NULL Segment */
-    init_gdt_desc(0, 0, PRESENT | SYSTEM | EXECUTABLE | READ_WRITE, PAGE_GR | BITS64, &gdtentry[1]);   /* Code 
-                                                                                                                 * segment 
-                                                                                                                 */
-    init_gdt_desc(0, 0, PRESENT | SYSTEM | READ_WRITE, PAGE_GR | BITS64, &gdtentry[2]);    /* Data 
-                                                                                                     * segment 
+    init_gdt_desc(0, 0, PRESENT | SYSTEM | EXECUTABLE | READ_WRITE, PAGE_GR | BITS64, &gdtentry[1]);    /* Code 
+                                                                                                         * segment 
+                                                                                                         */
+    init_gdt_desc(0, 0, PRESENT | SYSTEM | READ_WRITE, PAGE_GR | BITS64, &gdtentry[2]); /* Data 
+                                                                                         * segment 
+                                                                                         */
+    init_gdt_desc(0, 0, PRESENT | SYSTEM | USER_PRIV | EXECUTABLE | READ_WRITE, PAGE_GR | BITS64, &gdtentry[3]);    /* User 
+                                                                                                                     * Code 
+                                                                                                                     * Segment 
+                                                                                                                     */
+    init_gdt_desc(0, 0, PRESENT | SYSTEM | USER_PRIV | READ_WRITE, PAGE_GR | BITS64, &gdtentry[4]); /* User 
+                                                                                                     * Data 
+                                                                                                     * Segment 
                                                                                                      */
-    init_gdt_desc(0, 0, PRESENT | SYSTEM | USER_PRIV | EXECUTABLE | READ_WRITE, PAGE_GR | BITS64, &gdtentry[3]);   /* User 
-                                                                                                                             * Code 
-                                                                                                                             * Segment 
-                                                                                                                             */
-    init_gdt_desc(0, 0, PRESENT | SYSTEM | USER_PRIV | READ_WRITE, PAGE_GR | BITS64, &gdtentry[4]);    /* User 
-                                                                                                                 * Data 
-                                                                                                                 * Segment 
-                                                                                                                 */
 
 
-    /*gdt_flush((uint32_t) & gdtdesc); */
+    /*
+     * gdt_flush((uint32_t) & gdtdesc); 
+     */
 }

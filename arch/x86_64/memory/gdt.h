@@ -18,8 +18,8 @@
 #pragma GCC diagnostic ignored "-Wpedantic" /* Just because of the bit field (I'm so sad) 
                                              */
 
-#ifndef _NAVY_X86_GDT_H
-#define _NAVY_X86_GDT_H
+#ifndef _NAVY_X86_GDT_H_
+#define _NAVY_X86_GDT_H_
 
 #define GDT_SIZE 6
 

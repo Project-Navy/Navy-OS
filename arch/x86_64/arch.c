@@ -25,20 +25,21 @@
 #include <string.h>
 #include <stddef.h>
 
-typedef uint8_t stack[4096]; 
-static stack stacks[10] = {0};
+typedef uint8_t stack[4096];
+static stack stacks[10] = { 0 };
 
 void boot_stivale2(struct stivale2_struct *);
 
 __attribute__((section(".stivale2hdr"), used))
-struct stivale2_header header2 = {
-    (uint64_t) boot_stivale2,
-    (uintptr_t) stacks[0] + sizeof(stack),
-    0,
-    0
-};
+     struct stivale2_header
+         header2 = {
+         (uint64_t) boot_stivale2,
+         (uintptr_t) stacks[0] + sizeof(stack),
+         0,
+         0
+     };
 
-void 
+void
 boot_stivale2(struct stivale2_struct *info)
 {
     BootInfo boot_info;

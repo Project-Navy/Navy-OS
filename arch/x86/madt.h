@@ -15,8 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _NAVY_X86_MADT_H
-#define _NAVY_X86_MADT_H
+#ifndef _NAVY_X86_MADT_H_
+#define _NAVY_X86_MADT_H_
 
 #include <stdint.h>
 #include "arch/x86/acpi.h"

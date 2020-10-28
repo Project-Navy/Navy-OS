@@ -16,8 +16,8 @@
  */
 
 
-#ifndef NAVY_LIB_RANGE_H
-#define NAVY_LIB_RANGE_H
+#ifndef _NAVY_LIB_RANGE_H_
+#define _NAVY_LIB_RANGE_H_
 
 #include <stddef.h>
 #include <stdbool.h>

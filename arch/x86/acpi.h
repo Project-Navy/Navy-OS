@@ -15,8 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _NAVY_X86_ACPI_H
-#define _NAVY_x86_ACPI_H
+#ifndef _NAVY_X86_ACPI_H_
+#define _NAVY_x86_ACPI_H_
 
 #include <stdint.h>
 #include <Navy/libmultiboot.h>

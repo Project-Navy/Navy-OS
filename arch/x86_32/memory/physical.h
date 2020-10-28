@@ -14,8 +14,8 @@
  */
 
 
-#ifndef _NAVY_X86_PHYSICAL_H
-#define _NAVY_X86_PHYSICAL_H
+#ifndef _NAVY_X86_PHYSICAL_H_
+#define _NAVY_X86_PHYSICAL_H_
 
 #include <stdint.h>
 #include <stddef.h>

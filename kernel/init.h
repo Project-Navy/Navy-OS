@@ -15,8 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _NAVY_INIT_H
-#define _NAVY_INIT_H
+#ifndef _NAVY_INIT_H_
+#define _NAVY_INIT_H_
 
 void init(void);
 void a(void);

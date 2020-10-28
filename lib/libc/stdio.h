@@ -16,8 +16,8 @@
  */
 
 
-#ifndef _NAVY_LIBC_STDIO_H
-#define _NAVY_LIBC_STDIO_H
+#ifndef _NAVY_LIBC_STDIO_H_
+#define _NAVY_LIBC_STDIO_H_
 
 #include <stdarg.h>
 

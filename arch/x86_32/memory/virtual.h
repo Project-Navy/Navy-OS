@@ -15,8 +15,8 @@
  */
 
 
-#ifndef _NAVY_X86_VIRTUAL_H
-#define _NAVY_x86_VIRTUAL_H
+#ifndef _NAVY_X86_VIRTUAL_H_
+#define _NAVY_x86_VIRTUAL_H_
 #pragma GCC diagnostic ignored "-Wpedantic"
 
 #define PAGE_SIZE (4096)

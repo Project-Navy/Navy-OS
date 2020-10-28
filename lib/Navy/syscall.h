@@ -16,8 +16,8 @@
  */
 
 
-#ifndef _NAVY_ABI_SYSCALL_H
-#define _NAVY_ABI_SYSCALL_H
+#ifndef _NAVY_ABI_SYSCALL_H_
+#define _NAVY_ABI_SYSCALL_H_
 
 #include <stdint.h>
 #include <Navy/macro.h>

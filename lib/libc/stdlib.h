@@ -15,8 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _NAVY_LIBC_STDLIB_H
-#define _NAVY_LIBC_STDLIB_H
+#ifndef _NAVY_LIBC_STDLIB_H_
+#define _NAVY_LIBC_STDLIB_H_
 
 #include <stdint.h>
 #include <stddef.h>

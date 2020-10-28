@@ -15,7 +15,7 @@
 
 
 #include "arch/arch.h"
-#include "kernel/memory/physical.h"
+#include "arch/x86_32/memory/physical.h"
 #include "kernel/log.h"
 
 #include <Navy/range.h>

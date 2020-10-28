@@ -17,8 +17,8 @@
 
 
 
-#ifndef _NAVY_WARNING_H
-#define _NAVY_WARNING_H
+#ifndef _NAVY_WARNING_H_
+#define _NAVY_WARNING_H_
 
 #if defined(__linux__)
 #error "Please use a cross-compiler"

@@ -16,8 +16,8 @@
  */
 
 
-#ifndef _NAVY_x86_RSDT_H
-#define _NAVY_x86_RSDT_H
+#ifndef _NAVY_x86_RSDT_H_
+#define _NAVY_x86_RSDT_H_
 
 #pragma GCC diagnostic ignored "-Wpedantic" /* Just because of the dynamic array for the
                                              * RSDT struct */

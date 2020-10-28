@@ -29,22 +29,23 @@ void
 sys_texit(int return_value)
 {
     __unused(return_value);
-    #if defined (__i386__)
+#if defined (__i386__)
     exit_task(return_value);
-    #else
-        for(;;);
-    #endif
+#else
+    for (;;);
+#endif
 }
 
 pid_t
 sys_gettid(void)
 {
     pid_t pid;
-    #if defined(__i386__)
+
+#if defined(__i386__)
     pid = task_get_pid();
-    #else 
-        pid = 0;
-    #endif
+#else
+    pid = 0;
+#endif
 
     return pid;
 }
@@ -70,15 +71,15 @@ syscall(uintptr_t eax, uintptr_t ebx, uintptr_t ecx, uintptr_t edx)
             break;
 
         case SYS_gettid:
-            #if defined(__i386__)
+#if defined(__i386__)
             return_value = task_get_pid();
-            #endif
+#endif
             break;
 
         case SYS_usleep:
-            #if defined (__i386__)
+#if defined (__i386__)
             task_sleep(ebx / 1000);
-            #endif
+#endif
             break;
 
         default:

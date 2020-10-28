@@ -17,7 +17,7 @@
 
 
 #include "arch/x86_32/memory/virtual.h"
-#include "kernel/memory/physical.h"
+#include "arch/x86_32/memory/physical.h"
 #include "kernel/log.h"
 
 #include <stdint.h>

@@ -15,8 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _NAVY_x86_CPUID_H
-#define _NAVY_x86_CPUID_H
+#ifndef _NAVY_x86_CPUID_H_
+#define _NAVY_x86_CPUID_H_
 
 #include <stdint.h>
 
@@ -82,7 +82,7 @@ enum
 };
 
 
-void cpuid(int32_t, uintptr_t*, uintptr_t*);
+void cpuid(int32_t, uintptr_t *, uintptr_t *);
 int32_t cpuid_string(int32_t, uint32_t *);
 
 void cpuGetMSR(uint32_t, uint32_t *, uint32_t *);

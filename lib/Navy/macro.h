@@ -15,8 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _NAVY_X86_MACRO_H
-#define _NAVY_X86_MACRO_H
+#ifndef _NAVY_X86_MACRO_H_
+#define _NAVY_X86_MACRO_H_
 
 #define __unused(__stuff)(void)(__stuff)
 #define __align_up(__addr, __align) (((__addr) + (__align)-1) & ~((__align)-1))

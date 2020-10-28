@@ -15,8 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _NAVY_ASSERT_H
-#define _NAVY_ASSERT_H
+#ifndef _NAVY_ASSERT_H_
+#define _NAVY_ASSERT_H_
 
 #define assert(__expr) ((__expr) ? (void)(0) : __assert(#__expr, __FILE__, __FUNCTION__, __LINE__))
 
