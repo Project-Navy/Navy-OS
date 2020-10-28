@@ -19,10 +19,10 @@
 </p>
 
 
-## ⚙ Compile & Run
+## ⚙ Compile & Run (in 32 bits)
 
 ```sh
-make run-qemu
+make && ./script/run-32bits-limine.sh 
 ```
 
 ## Author
