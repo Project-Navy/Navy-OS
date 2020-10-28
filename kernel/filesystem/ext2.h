@@ -20,7 +20,6 @@
 #pragma GCC diagnostic ignored "-Wpedantic"
 
 #include <stdint.h>
-#include <stdbool.h>
 
 enum EXT2_STATE
 {
@@ -195,8 +194,8 @@ union INODE_OS_SPEC
 
     struct
     {
-        bool i_frag:1;
-        bool i_fsize:1;
+        uint8_t i_frag;
+        uint8_t i_fsize;
         uint16_t reserved[5];
     } as_masix;
 };
