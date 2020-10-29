@@ -39,17 +39,26 @@ pow(double base, double power)
 }
 
 double
-factorial(double number) {
-    if (number == 0 || number == 1) {
+factorial(double number) 
+{
+    double i;
+    double result = 1;
+    
+    if (number == 0 || number == 1) 
+    {
         return 1;
-    } else {
-        double i;
-    	double result = 1;
-    	for (i = 2; i <= number; i++) {
+    }
+
+    else 
+    {
+    	for (i = 2; i <= number; i++) 
+        {
         	result *= i;
     	}
+
     	return result;
 	}
+
 }
 
 double
