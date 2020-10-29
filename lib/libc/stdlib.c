@@ -57,7 +57,6 @@ itoa(int32_t value, char *str, uint16_t base)
     str = strrev(str);
 
     return str;
-
 }
 
 
@@ -71,7 +70,7 @@ atoi(const char *nptr)
     if (nptr[index] == '-')
     {
         is_negative = true;
-        nptr++;
+        index++;
     }
 
     while (nptr[index] != '\0')

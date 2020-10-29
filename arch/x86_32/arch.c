@@ -24,6 +24,7 @@
 #include "arch/x86_32/memory/task.h"
 
 #include "kernel/log.h"
+#include "kernel/filesystem/ramdisk.h"
 
 #include <Navy/libmultiboot.h>
 #include <Navy/assert.h>
@@ -32,7 +33,7 @@
 #include <stivale2.h>
 #include <string.h>
 #include <stddef.h>
-
+#include <math.h>
 
 void
 init_arch(BootInfo * info)
@@ -48,6 +49,7 @@ init_arch(BootInfo * info)
     klog(OK, "IDT loaded\n");
 
     init_tasking();
+    mount_ramdisk(info);
 }
 
 void

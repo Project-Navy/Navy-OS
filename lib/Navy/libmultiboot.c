@@ -18,6 +18,7 @@
 #include <Navy/range.h>
 #include <Navy/libmultiboot.h>
 #include <Navy/macro.h>
+#include <Navy/assert.h>
 
 #include <stdint.h>
 #include <multiboot2.h>
@@ -39,10 +40,7 @@ multiboot2_parse_mmap(BootInfo * info, struct multiboot_tag_mmap *tag)
     for (mmap = tag->entries; (uint8_t *) mmap < (uint8_t *) tag + tag->size;
          mmap = (struct multiboot_mmap_entry *) ((uintptr_t) mmap + tag->entry_size))
     {
-        if (info->memory_map_size > LIMIT_MEMORY_MAP_SIZE)
-        {
-            panic("Invalid memory map size ! (%d)\n", info->memory_usable);
-        }
+        assert(info->memory_map_size < LIMIT_MODULES_SIZE);
 
         if ((mmap->addr > UINTPTR_MAX) || (mmap->addr + mmap->len > UINTPTR_MAX))
         {
@@ -74,11 +72,7 @@ multiboot2_parse_module(BootInfo * info, struct multiboot_tag_module *m)
     Module *module;
     Range range;
 
-    if (info->modules_size < LIMIT_MODULES_SIZE)
-    {
-        panic("Cannot parse the modules !\n");
-    }
-
+    assert(info->modules_size < LIMIT_MODULES_SIZE);
     module = &info->modules[info->modules_size];
 
     range.begin = m->mod_start;
@@ -86,6 +80,9 @@ multiboot2_parse_module(BootInfo * info, struct multiboot_tag_module *m)
     align_range(&range);
 
     strncpy(module->cmd, (const char *) m->cmdline, LIMIT_CMD_SIZE);
+
+    klog(OK, "Module addr: %x\n", range.begin);
+    module->range = range;
 
     info->modules_size++;
 }

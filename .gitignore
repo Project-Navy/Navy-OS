@@ -11,7 +11,9 @@ peda-session-*
 # Iso 
 navy.iso
 navy.img
+ramdisk.tar
 isodir/
+rootfs/
 
 # GNU Indent Backup
 *~

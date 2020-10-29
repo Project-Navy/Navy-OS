@@ -100,7 +100,9 @@ stivale2_parse_module(BootInfo * info, struct stivale2_struct_tag_modules *m)
         range.size = me.end - me.begin;
         align_range(&range);
 
-        strncmp(module->cmd, (const char *) me.string, STIVALE2_MODULE_STRING_SIZE);
+        module->range = range;
+
+        strncpy(module->cmd, (const char *) me.string, STIVALE2_MODULE_STRING_SIZE);
 
         info->modules_size++;
     }

@@ -84,13 +84,13 @@ register_dump(struct InterruptStackFrame stackframe)
     __asm__ volatile ("mov %%cr3, %0":"=r" (cr3));
     __asm__ volatile ("mov %%cr4, %0":"=r" (cr4));
 
-    klog(NONE, "CS=%04x      DS=%04x      ES=%04x      FS=%04x       GS=%04x\n",
+    klog(NONE, "CS=%04x  DS=%04x  ES=%04x  FS=%04x  GS=%04x\n",
          stackframe.cs, stackframe.ds, stackframe.es, stackframe.fs, stackframe.gs);
     klog(NONE, "EAX=%08x EBX=%08x ECX=%08x EDX=%08x\n", stackframe.eax,
          stackframe.ebx, stackframe.ecx, stackframe.edx);
     klog(NONE, "EDI=%08x ESI=%08x EBP=%08x ESP=%08x\n", stackframe.edi,
          stackframe.esi, stackframe.ebp, stackframe.esp);
-    klog(NONE, "INT=%08x ERR=%08x EIP=%08x FLG=%08x\n", stackframe.intno,
+    klog(NONE, "INT=%08x ERR=%08x \033[91mEIP=%08x\033[39m FLG=%08x\n", stackframe.intno,
          stackframe.err, stackframe.eip, stackframe.eflags);
     klog(NONE, "CR0=%08x CR2=%08x CR3=%08x CR4=%08x\n", cr0, cr2, cr3, cr4);
 }

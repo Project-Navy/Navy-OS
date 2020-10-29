@@ -148,7 +148,6 @@ init_paging(BootInfo * info)
     align_range(&kernel_range);
 
     memory_map_identity(kernel_address_space(), kernel_range, MEMORY_NONE);
-    klog(OK, "Kernel mapped\n");
 
     for (i = 0; i < info->modules_size; i++)
     {
