@@ -7,6 +7,7 @@ build/
 *.sym
 peda-session-*
 .gdb_history
+.vscode
 
 # Iso 
 navy.iso
