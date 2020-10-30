@@ -34,8 +34,6 @@ init_vector(Vector *vector)
 void 
 vector_push_back(Vector *vector, void *to_push)
 {
-    vector_dump_str(*vector);
-
     if (vector->length == vector->capacity)
     {
         vector->capacity += 32;
@@ -70,12 +68,12 @@ vector_dump_str(Vector vector)
 
     klog(OK, "[ ");
 
-    for (i = 0; i < vector.length; i++)
+    for (i = 0; i < vector.length-1; i++)
     {
-        klog(NONE, "%s %08x, ", (char *) vector_get(vector, i), vector_get(vector, i));
+        klog(NONE, "%s, ", (char *) vector_get(vector, i));
     }
 
-    klog(NONE, " ]\n");
+    klog(NONE, " %s ]\n", (char *) vector_get(vector, i));
 }
 
 Vector 
@@ -110,6 +108,7 @@ vector_split(char *str, char del)
         str++;
     }
 
+    tmp[i] = '\0';
     vector_push_back(&vector, strdup(tmp));
 
     return vector;

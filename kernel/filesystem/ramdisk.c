@@ -118,11 +118,10 @@ parse_tar(Range ramdisk_range)
         }
 
         debug_print("\n\n");
-
-        klog(OK, "Full Path: %s\n", header->name);
         
         filename = vector_split(header->name, '/');
         klog(OK, "Vector length: %d\n", filename.length);
+        vector_dump_str(filename);
         node->header = header;
 
 
@@ -131,7 +130,6 @@ parse_tar(Range ramdisk_range)
         if (node_name[0] == '\0')
         {
             node_name = (char *) vector_pop_back(&filename);
-            klog(OK, "It's a directory\n");
             init_vector(&node->children);
         }
 

@@ -52,7 +52,6 @@ liballoc_alloc(int pages)
 #else
     addr = 0;
 #endif
-    klog(OK, "RETURN OF ALLOC: %x\n", addr);
     return (void *) addr;
 }
 
