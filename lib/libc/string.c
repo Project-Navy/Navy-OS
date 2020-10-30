@@ -18,6 +18,7 @@
 
 #include <string.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include "kernel/log.h"
 
 
@@ -211,4 +212,13 @@ strcmp(const char *s1, const char *s2)
     }
 
     return if_eq;
+}
+
+char *
+strdup(char *s)
+{
+    char *return_value = (char *) malloc(strlen(s)+1);
+    strcpy(return_value, s);
+
+    return return_value;
 }

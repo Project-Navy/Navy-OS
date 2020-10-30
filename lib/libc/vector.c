@@ -34,10 +34,12 @@ init_vector(Vector *vector)
 void 
 vector_push_back(Vector *vector, void *to_push)
 {
+    vector_dump_str(*vector);
+
     if (vector->length == vector->capacity)
     {
-        vector->array = (void **) realloc(vector->array, sizeof(void *) * (vector->capacity+32));
         vector->capacity += 32;
+        vector->array = (void **) realloc(vector->array, sizeof(void *) * vector->capacity);
     }
 
     vector->array[vector->length++] = to_push;
@@ -61,7 +63,6 @@ vector_get(Vector vector, size_t index)
     return vector.array[index];
 }
 
-
 void 
 vector_dump_str(Vector vector)
 {
@@ -71,7 +72,7 @@ vector_dump_str(Vector vector)
 
     for (i = 0; i < vector.length; i++)
     {
-        klog(NONE, "%s, ", (char *) vector_get(vector, i));
+        klog(NONE, "%s %08x, ", (char *) vector_get(vector, i), vector_get(vector, i));
     }
 
     klog(NONE, " ]\n");
@@ -81,21 +82,20 @@ Vector
 vector_split(char *str, char del)
 {
     Vector vector;
-    char tmp[256];
+    char tmp[512];
 
     size_t i = 0;
 
     init_vector(&vector);
 
-    
     while(*str)
     {
         if (*str == del && i > 0)
         {
             tmp[i] = '\0';
-            klog(OK, "Pushing: %s\n", tmp);
-            vector_push_back(&vector, tmp);
+            vector_push_back(&vector, strdup(tmp));
             memset(tmp, 0, i);
+            
             i = 0;
         }
         else if(*str == del)
@@ -110,8 +110,7 @@ vector_split(char *str, char del)
         str++;
     }
 
-    klog(OK, "Pushing: %s\n", tmp);
-    vector_push_back(&vector, tmp);
+    vector_push_back(&vector, strdup(tmp));
 
     return vector;
 }

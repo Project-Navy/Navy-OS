@@ -48,10 +48,11 @@ liballoc_alloc(int pages)
     __unused(pages);
 
 #if defined(__i386__)
-    memory_alloc(kernel_address_space(), pages * PAGE_SIZE, MEMORY_NONE, &addr);
+    memory_alloc(kernel_address_space(), pages * PAGE_SIZE, MEMORY_CLEAR, &addr);
 #else
     addr = 0;
 #endif
+    klog(OK, "RETURN OF ALLOC: %x\n", addr);
     return (void *) addr;
 }
 
@@ -67,9 +68,9 @@ liballoc_free_(void *addr, int size)
 #if defined(__i386__)
 
     range.begin = (uintptr_t) addr;
-    range.size = size;
+    range.size = size * PAGE_SIZE;
 
-    virtual_free(kernel_address_space(), range);
+    memory_free(kernel_address_space(), range);
 #endif
 
     return 0;
