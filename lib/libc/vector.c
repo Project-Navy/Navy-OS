@@ -17,6 +17,11 @@
 
 #include <vector.h>
 #include <stdlib.h>
+#include <string.h>
+
+#include <Navy/assert.h>
+
+#include "kernel/log.h"
 
 void 
 init_vector(Vector *vector)
@@ -44,9 +49,9 @@ vector_pop_back(Vector *vector)
     void *return_value;
 
     return_value = vector->array[vector->length-1];
-    vector->array[vector->length-1] = NULL;
-    vector->length--;
+    free(vector->array[vector->length-1]);
 
+    vector->length--;
     return return_value;
 }
 
@@ -56,8 +61,57 @@ vector_get(Vector vector, size_t index)
     return vector.array[index];
 }
 
-size_t 
-vector_length(Vector vector)
+
+void 
+vector_dump_str(Vector vector)
 {
-    return vector.length;
+    size_t i;
+
+    klog(OK, "[ ");
+
+    for (i = 0; i < vector.length; i++)
+    {
+        klog(NONE, "%s, ", (char *) vector_get(vector, i));
+    }
+
+    klog(NONE, " ]\n");
+}
+
+Vector 
+vector_split(char *str, char del)
+{
+    Vector vector;
+    char tmp[256];
+
+    size_t i = 0;
+
+    init_vector(&vector);
+
+    
+    while(*str)
+    {
+        if (*str == del && i > 0)
+        {
+            tmp[i] = '\0';
+            klog(OK, "Pushing: %s\n", tmp);
+            vector_push_back(&vector, tmp);
+            memset(tmp, 0, i);
+            i = 0;
+        }
+        else if(*str == del)
+        {
+            i = 0;
+        }
+        else 
+        {
+            tmp[i++] = *str;
+        }
+
+        str++;
+    }
+
+    klog(OK, "Pushing: %s\n", tmp);
+    vector_push_back(&vector, tmp);
+
+    return vector;
 }

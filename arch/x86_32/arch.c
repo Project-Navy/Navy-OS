@@ -35,6 +35,8 @@
 #include <stddef.h>
 #include <math.h>
 
+#include <vector.h>
+
 void
 init_arch(BootInfo * info)
 {
@@ -72,7 +74,7 @@ boot_stivale2(struct stivale2_struct *info)
     stivale2_parse_header(&boot_info, info);
 
     init_arch(&boot_info);
-
+    
     disable_interrupts();
     hlt();
 }

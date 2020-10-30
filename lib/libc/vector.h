@@ -33,6 +33,8 @@ void init_vector(Vector *);
 void vector_push_back(Vector *, void *);
 void *vector_pop_back(Vector *);
 void *vector_get(Vector, size_t);
-size_t vector_length(Vector);
+void vector_dump_str(Vector);
+
+Vector vector_split(char *, char);
 
 #endif

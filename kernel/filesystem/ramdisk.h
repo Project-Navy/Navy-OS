@@ -21,6 +21,8 @@
 #include <Navy/libmultiboot.h>
 #include <Navy/range.h>
 
+#include <vector.h>
+
 struct TAR_HEADER
 {
     char name[100];
@@ -41,6 +43,13 @@ struct TAR_HEADER
     char prefix[155];
 } __attribute__((packed));
 
+struct TAR_NODE
+{
+    char *filename;
+    struct TAR_HEADER *header;
+    struct TAR_NODE *parent;
+    Vector children;
+};
 
 void mount_ramdisk(BootInfo *);
 size_t parse_tar(Range);

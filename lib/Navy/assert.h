@@ -18,6 +18,8 @@
 #ifndef _NAVY_ASSERT_H_
 #define _NAVY_ASSERT_H_
 
+#pragma GCC diagnostic ignored "-Wpedantic"
+
 #define assert(__expr) ((__expr) ? (void)(0) : __assert(#__expr, __FILE__, __FUNCTION__, __LINE__))
 
 void __assert(const char *, const char *, const char *, int);

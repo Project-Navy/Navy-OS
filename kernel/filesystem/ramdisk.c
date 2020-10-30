@@ -23,8 +23,11 @@
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
+#include <vector.h>
 
 #include <Navy/macro.h>
+
+Vector nodes;
 
 void
 mount_ramdisk(BootInfo * info)
@@ -33,6 +36,8 @@ mount_ramdisk(BootInfo * info)
     size_t header_length;
 
     Module ramdisk;
+
+    init_vector(&nodes);
 
     for (i = 0; i < info->modules_size; i++)
     {
@@ -62,25 +67,76 @@ getsize(const char *in)
     return size;
 }
 
+struct TAR_NODE * 
+find_parent(struct TAR_NODE *child, char *name)
+{
+    size_t i;
+    struct TAR_NODE *node;
+
+    klog(OK, "Parent name: %s\n", name);
+
+    if (name[0] == '\0')
+    {
+        return NULL;
+    }
+
+    for (i = 0; i < nodes.length; i++)
+    {
+        node = (struct TAR_NODE *) vector_get(nodes, i);
+        
+        if (strcmp(node->filename, name) == 0)
+        {
+            vector_push_back(&node->children, child);
+            return node;
+        }
+    }
+
+    panic("Reached an unreachable point !\n");
+    return NULL;
+}
+
 size_t
 parse_tar(Range ramdisk_range)
 {
     size_t i;
     size_t size;
+    Vector filename;
+    char *node_name;
     struct TAR_HEADER *header;
 
+    struct TAR_NODE *node;
     uintptr_t addr = ramdisk_range.begin;
 
     for (i = 0;; i++)
     {
         header = (struct TAR_HEADER *) addr;
+        node = (struct TAR_NODE *) malloc(sizeof(struct TAR_NODE));
 
         if (header->name[0] == '\0')
         {
             break;
         }
 
-        klog(OK, "%s\n", header->name);
+        debug_print("\n\n");
+
+        klog(OK, "Full Path: %s\n", header->name);
+        
+        filename = vector_split(header->name, '/');
+        klog(OK, "Vector length: %d\n", filename.length);
+        node->header = header;
+
+
+        node_name = (char *) vector_pop_back(&filename);
+
+        if (node_name[0] == '\0')
+        {
+            node_name = (char *) vector_pop_back(&filename);
+            klog(OK, "It's a directory\n");
+            init_vector(&node->children);
+        }
+
+        klog(OK, "Node name: %s\n", node_name);
+        /* node->parent = find_parent(node, (char *) vector_pop_back(&filename)); */
 
         size = getsize(header->size);
         addr += ((size / 512) + 1) * 512;
