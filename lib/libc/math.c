@@ -49,12 +49,12 @@ factorial(double number)
         return 1;
     }
 
-    else 
+    else
     {
-    	for (i = 2; i <= number; i++) 
+        for (i = 2; i <= number; i++)
         {
-        	result *= i;
-    	}
+            result *= i;
+        }
 
         return result;
     }
