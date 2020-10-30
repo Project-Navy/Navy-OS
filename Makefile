@@ -19,9 +19,10 @@ CFLAGS := \
     -ffreestanding	             \
     -g			                 \
     -nostdlib			         \
-	-ansi						 \
 	-pedantic					 \
-	-Wpedantic					 
+	-Wpedantic					 \
+	-ffreestanding 				 \
+	-nostdlib
 
 LDFLAGS :=
 

@@ -18,6 +18,8 @@
 #ifndef _NAVY_x86_CPUID_H_
 #define _NAVY_x86_CPUID_H_
 
+#pragma GCC diagnostic ignored "-Wpedantic"
+
 #include <stdint.h>
 
 enum
