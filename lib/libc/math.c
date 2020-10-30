@@ -43,7 +43,7 @@ factorial(double number)
 {
     double i;
     double result = 1;
-    
+
     if (number == 0 || number == 1) 
     {
         return 1;
@@ -56,8 +56,8 @@ factorial(double number)
         	result *= i;
     	}
 
-    	return result;
-	}
+        return result;
+    }
 
 }
 
