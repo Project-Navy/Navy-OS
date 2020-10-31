@@ -30,10 +30,13 @@ typedef struct
 } Vector;
 
 void init_vector(Vector *);
+void vector_free(Vector *);
 void vector_push_back(Vector *, void *);
 void *vector_pop_back(Vector *);
 void *vector_get(Vector, size_t);
 void vector_dump_str(Vector);
+
+char *vector_join(Vector, char);
 
 Vector vector_split(char *, char);
 

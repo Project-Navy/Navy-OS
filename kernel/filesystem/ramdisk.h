@@ -45,7 +45,7 @@ struct TAR_HEADER
 
 struct TAR_NODE
 {
-    char *filename;
+    char filename[100];
     struct TAR_HEADER *header;
     struct TAR_NODE *parent;
     Vector children;

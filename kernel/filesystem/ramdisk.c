@@ -67,32 +67,49 @@ getsize(const char *in)
     return size;
 }
 
-struct TAR_NODE * 
-find_parent(struct TAR_NODE *child, char *name)
+void
+find_parent(struct TAR_NODE *child, Vector path)
+{
+    size_t i;
+    struct TAR_NODE *parent_node;
+    
+    char *parent_path;
+
+    if (path.length == 0)
+    {
+        child->parent = NULL;
+    }
+
+    parent_path = vector_join(path, '/');
+    strcat(parent_path, "/");
+
+    for (i = 0; i < nodes.length; i++)
+    {
+        parent_node = (struct TAR_NODE *) vector_get(nodes, i);
+
+        if (strcmp(parent_path, parent_node->header->name) == 0)
+        {
+            vector_push_back(&parent_node->children, child);
+            child->parent = parent_node;
+        }
+    }
+}
+
+void 
+test_ls_root(void)
 {
     size_t i;
     struct TAR_NODE *node;
 
-    klog(OK, "Parent name: %s\n", name);
-
-    if (name[0] == '\0')
-    {
-        return NULL;
-    }
-
     for (i = 0; i < nodes.length; i++)
     {
         node = (struct TAR_NODE *) vector_get(nodes, i);
-        
-        if (strcmp(node->filename, name) == 0)
+
+        if (node->parent == NULL)
         {
-            vector_push_back(&node->children, child);
-            return node;
+            klog(OK, "%s\n", node->filename);
         }
     }
-
-    panic("Reached an unreachable point !\n");
-    return NULL;
 }
 
 size_t
@@ -116,12 +133,8 @@ parse_tar(Range ramdisk_range)
         {
             break;
         }
-
-        debug_print("\n\n");
         
         filename = vector_split(header->name, '/');
-        klog(OK, "Vector length: %d\n", filename.length);
-        vector_dump_str(filename);
         node->header = header;
 
 
@@ -133,8 +146,12 @@ parse_tar(Range ramdisk_range)
             init_vector(&node->children);
         }
 
-        klog(OK, "Node name: %s\n", node_name);
-        /* node->parent = find_parent(node, (char *) vector_pop_back(&filename)); */
+        strcpy(node->filename, node_name);
+        find_parent(node, filename);
+
+        vector_push_back(&nodes, node);
+
+        vector_free(&filename);
 
         size = getsize(header->size);
         addr += ((size / 512) + 1) * 512;
@@ -144,6 +161,8 @@ parse_tar(Range ramdisk_range)
             addr += 512;
         }
     }
+
+    test_ls_root();
 
     return i;
 }

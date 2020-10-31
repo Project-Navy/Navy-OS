@@ -32,6 +32,32 @@ init_vector(Vector *vector)
 }
 
 void 
+vector_free(Vector *vector)
+{
+    free(vector->array);
+    vector->capacity = 0;
+    vector->length = 0;
+}
+
+char *
+vector_join(Vector vector, char c)
+{
+    size_t i;
+
+    char return_value[100];
+    memset(return_value, 0, 100);
+
+    for (i = 0; i < vector.length; i++)
+    {
+        strcat(return_value+strlen(return_value), vector_get(vector, i));
+        return_value[strlen(return_value)] = c;
+    }
+
+    return_value[strlen(return_value)-1] = '\0';
+    return strdup(return_value);
+}
+
+void 
 vector_push_back(Vector *vector, void *to_push)
 {
     if (vector->length == vector->capacity)
@@ -66,6 +92,12 @@ vector_dump_str(Vector vector)
 {
     size_t i;
 
+    if (vector.length == 0)
+    {
+        klog(OK, "[]");
+        return;
+    }
+
     klog(OK, "[ ");
 
     for (i = 0; i < vector.length-1; i++)
@@ -73,7 +105,7 @@ vector_dump_str(Vector vector)
         klog(NONE, "%s, ", (char *) vector_get(vector, i));
     }
 
-    klog(NONE, " %s ]\n", (char *) vector_get(vector, i));
+    klog(NONE, "%s ]\n", (char *) vector_get(vector, i));
 }
 
 Vector 

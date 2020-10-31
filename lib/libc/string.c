@@ -33,18 +33,19 @@ strlen(const char *s)
 
 
 char *
-strcat(char *dst, const char *src)
+strcat(char *dest, const char *src)
 {
-    uint8_t length = strlen(dst);
-    uint8_t i;
+    size_t dest_len = strlen(dest);
+    size_t i;
 
-    for (i = 0; i < strlen(src); i++)
+    for (i = 0 ; src[i] != '\0' ; i++)
     {
-        dst[length + i] = src[i];
+        dest[dest_len + i] = src[i];
     }
+    
+    dest[dest_len + i] = '\0';
 
-    dst[length + i] = '\0';
-    return dst;
+    return dest; 
 }
 
 char *
@@ -176,6 +177,8 @@ strcpy(char *dest, const char *src)
     {
         dest[index++] = *src++;
     }
+
+    dest[index] = '\0';
 
     return dest;
 }
