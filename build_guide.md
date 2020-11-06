@@ -21,7 +21,7 @@ $ cd NavyOS/
 
 NavyOS depends on some useful tools to work properly. You must setup them before trying to compile the system.
 ```bash
-$ ./script/setup-deps.sh
+$ ./script/build-limine.sh
 ```
 Note: If the compilation of echfs fails try to install a newer version of fuse.
 
