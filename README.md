@@ -21,9 +21,7 @@
 
 ## ⚙ Compile & Run (in 32 bits)
 
-```sh
-make && ./script/run-32bits-limine.sh 
-```
+To compile and run the OS, follow the instructions given in the [build guide](https://github.com/Project-Navy/Navy/build_guide.md).
 
 ## Author
 
