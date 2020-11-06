@@ -71,20 +71,20 @@ $ ../gcc-10.2.0/configure       \
 Compile the sources with Make and install it to the previously given directory (/opt/cross-compiler).
 ```bash
 $ cd ../build_binutils
-$ make -j6
+$ make -j$(nproc)
 $ make install
 ```
 
 ```bash
 $ cd ../build_gcc
-$ make -j6 all-gcc
+$ make -j$(nproc) all-gcc
 $ make install-gcc
 ```
 
 # Build the system and run it on QEMU
 Compile the system and run it in 32bits with the limine bootloader.
 ```bash
-$ make -j6
+$ make -j$(nproc)
 $ ./script/run-32bits-limine.sh
 ```
 
