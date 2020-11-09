@@ -15,7 +15,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include "arch/arch.h"
 
 #include "arch/x86_32/interrupt/idt.h"
@@ -25,6 +24,8 @@
 
 #include "kernel/log.h"
 #include "kernel/filesystem/ramdisk.h"
+
+#include <Navy/syscall.h>
 
 #include <Navy/libmultiboot.h>
 #include <Navy/assert.h>
@@ -37,8 +38,8 @@
 
 #include <vector.h>
 
-void
-init_arch(BootInfo * info)
+void 
+init_arch(BootInfo *info)
 {
     init_x86(info);
     init_paging(info);
@@ -65,7 +66,7 @@ boot_multiboot2(uintptr_t addr, uint32_t magic)
     init_arch(&boot_info);
 }
 
-void
+void 
 boot_stivale2(struct stivale2_struct *info)
 {
     BootInfo boot_info;
@@ -74,7 +75,7 @@ boot_stivale2(struct stivale2_struct *info)
     stivale2_parse_header(&boot_info, info);
 
     init_arch(&boot_info);
-    
+
     disable_interrupts();
     hlt();
 }

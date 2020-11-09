@@ -17,7 +17,6 @@
 
 #ifndef _NAVY_x86_MEMORY_TASKS_H_
 #define _NAVY_x86_MEMORY_TASKS_H_
-#pragma GCC diagnostic ignored "-Wdeclaration-after-statement"
 
 #include "arch/x86_32/interrupt/interrupt.h"
 

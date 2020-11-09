@@ -21,6 +21,8 @@
 
 #include <stdarg.h>
 
+typedef void FILE;
+
 int getchar(void);
 char *gets(char *);
 

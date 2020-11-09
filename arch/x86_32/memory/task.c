@@ -36,13 +36,13 @@ int new_pid = 0;
 int
 create_task(char *name, void (*thread)())
 {
-    disable_interrupts();
 
     int last_pid;
     uintptr_t addr;
     task_t *task;
     struct InterruptStackFrame *stackframe;
 
+    disable_interrupts();
     assert(strlen(name) < 32);
 
     task = (task_t *) malloc(sizeof(task_t));

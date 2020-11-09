@@ -13,16 +13,16 @@ CFLAGS := \
     -Werror                      \
     -I.                          \
     -Ilib/multiboot              \
-	-Ithird-party/limine/stivale \
-	-Ilib/libc					 \
-	-Ilib						 \
+    -Ithird-party/limine/stivale \
+    -Ilib/libc					 \
+    -Ilib						 \
     -ffreestanding	             \
     -g			                 \
     -nostdlib			         \
-	-pedantic					 \
-	-Wpedantic					 \
-	-ffreestanding 				 \
-	-nostdlib
+    -pedantic					 \
+    -Wpedantic					 \
+    -ffreestanding 				 \
+    -nostdlib
 
 LDFLAGS :=
 

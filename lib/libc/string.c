@@ -38,14 +38,14 @@ strcat(char *dest, const char *src)
     size_t dest_len = strlen(dest);
     size_t i;
 
-    for (i = 0 ; src[i] != '\0' ; i++)
+    for (i = 0; src[i] != '\0'; i++)
     {
         dest[dest_len + i] = src[i];
     }
-    
+
     dest[dest_len + i] = '\0';
 
-    return dest; 
+    return dest;
 }
 
 char *
@@ -220,7 +220,8 @@ strcmp(const char *s1, const char *s2)
 char *
 strdup(char *s)
 {
-    char *return_value = (char *) malloc(strlen(s)+1);
+    char *return_value = (char *) malloc(strlen(s) + 1);
+
     strcpy(return_value, s);
 
     return return_value;

@@ -15,12 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #ifndef _NAVY_x86_RSDT_H_
 #define _NAVY_x86_RSDT_H_
-
-#pragma GCC diagnostic ignored "-Wpedantic" /* Just because of the dynamic array for the
-                                             * RSDT struct */
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -39,11 +35,15 @@ struct ACPISDTHeader
     uint32_t CreatorRevision;
 } __attribute__((packed));
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic" 
 struct RSDT
 {
     struct ACPISDTHeader h;
     uintptr_t PointerToOtherSDT[];
 };
+
+#pragma GCC diagnostic pop
 
 bool rsdt_checksum(struct ACPISDTHeader *);
 void *find_SDT(void *, char *);

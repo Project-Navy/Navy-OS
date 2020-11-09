@@ -23,16 +23,16 @@
 
 #include "kernel/log.h"
 
-void 
-init_vector(Vector *vector)
+void
+init_vector(Vector * vector)
 {
     vector->array = (void **) malloc(sizeof(void *) * 32);
     vector->capacity = 32;
     vector->length = 0;
 }
 
-void 
-vector_free(Vector *vector)
+void
+vector_free(Vector * vector)
 {
     free(vector->array);
     vector->capacity = 0;
@@ -45,37 +45,39 @@ vector_join(Vector vector, char c)
     size_t i;
 
     char return_value[100];
+
     memset(return_value, 0, 100);
 
     for (i = 0; i < vector.length; i++)
     {
-        strcat(return_value+strlen(return_value), vector_get(vector, i));
+        strcat(return_value + strlen(return_value), vector_get(vector, i));
         return_value[strlen(return_value)] = c;
     }
 
-    return_value[strlen(return_value)-1] = '\0';
+    return_value[strlen(return_value) - 1] = '\0';
     return strdup(return_value);
 }
 
-void 
-vector_push_back(Vector *vector, void *to_push)
+void
+vector_push_back(Vector * vector, void *to_push)
 {
     if (vector->length == vector->capacity)
     {
         vector->capacity += 32;
-        vector->array = (void **) realloc(vector->array, sizeof(void *) * vector->capacity);
+        vector->array =
+            (void **) realloc(vector->array, sizeof(void *) * vector->capacity);
     }
 
     vector->array[vector->length++] = to_push;
 }
 
 void *
-vector_pop_back(Vector *vector)
+vector_pop_back(Vector * vector)
 {
     void *return_value;
 
-    return_value = vector->array[vector->length-1];
-    free(vector->array[vector->length-1]);
+    return_value = vector->array[vector->length - 1];
+    free(vector->array[vector->length - 1]);
 
     vector->length--;
     return return_value;
@@ -87,7 +89,7 @@ vector_get(Vector vector, size_t index)
     return vector.array[index];
 }
 
-void 
+void
 vector_dump_str(Vector vector)
 {
     size_t i;
@@ -100,7 +102,7 @@ vector_dump_str(Vector vector)
 
     klog(OK, "[ ");
 
-    for (i = 0; i < vector.length-1; i++)
+    for (i = 0; i < vector.length - 1; i++)
     {
         klog(NONE, "%s, ", (char *) vector_get(vector, i));
     }
@@ -108,7 +110,7 @@ vector_dump_str(Vector vector)
     klog(NONE, "%s ]\n", (char *) vector_get(vector, i));
 }
 
-Vector 
+Vector
 vector_split(char *str, char del)
 {
     Vector vector;
@@ -118,21 +120,21 @@ vector_split(char *str, char del)
 
     init_vector(&vector);
 
-    while(*str)
+    while (*str)
     {
         if (*str == del && i > 0)
         {
             tmp[i] = '\0';
             vector_push_back(&vector, strdup(tmp));
             memset(tmp, 0, i);
-            
+
             i = 0;
         }
-        else if(*str == del)
+        else if (*str == del)
         {
             i = 0;
         }
-        else 
+        else
         {
             tmp[i++] = *str;
         }

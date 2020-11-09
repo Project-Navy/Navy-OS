@@ -18,9 +18,11 @@
 #ifndef _NAVY_x86_CPUID_H_
 #define _NAVY_x86_CPUID_H_
 
-#pragma GCC diagnostic ignored "-Wpedantic"
 
 #include <stdint.h>
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
 
 enum
 {
@@ -82,6 +84,8 @@ enum
     CPUID_FEAT_EDX_IA64 = 1 << 30,
     CPUID_FEAT_EDX_PBE = 1 << 31
 };
+
+#pragma GCC diagnostic pop
 
 
 void cpuid(int32_t, uintptr_t *, uintptr_t *);

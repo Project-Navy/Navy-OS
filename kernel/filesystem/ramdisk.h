@@ -43,15 +43,17 @@ struct TAR_HEADER
     char prefix[155];
 } __attribute__((packed));
 
-struct TAR_NODE
+struct PATH_NODE 
 {
     char filename[100];
     struct TAR_HEADER *header;
-    struct TAR_NODE *parent;
+    struct PATH_NODE *parent;
     Vector children;
 };
 
 void mount_ramdisk(BootInfo *);
 size_t parse_tar(Range);
+
+uintptr_t find_node(const char *);
 
 #endif

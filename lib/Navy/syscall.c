@@ -19,8 +19,10 @@
 #include "kernel/log.h"
 
 #include "arch/x86_32/memory/task.h"
+#include "kernel/filesystem/ramdisk.h"
 
 #include <stdarg.h>
+#include <stdio.h>
 
 #include <Navy/syscall.h>
 #include <Navy/macro.h>

@@ -17,7 +17,8 @@
 
 #ifndef _NAVY_FILESYSTEM_EXT2_H_
 #define _NAVY_FILESYSTEM_EXT2_H_
-#pragma GCC diagnostic ignored "-Wpedantic"
+
+
 
 #include <stdint.h>
 
@@ -105,6 +106,9 @@ enum DIR_ENTRY_TYPE
     UNIX_SOCKET,
     SYMLINK
 };
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
 
 struct EXT2_BASE_SUPERBLOCK_FIELD
 {
@@ -221,6 +225,8 @@ struct INODE
     uint32_t i_faddr;
     union INODE_OS_SPEC i_osd2;
 };
+
+#pragma GCC diagnostic push
 
 struct DIR_ENTRY
 {

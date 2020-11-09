@@ -68,11 +68,11 @@ getsize(const char *in)
 }
 
 void
-find_parent(struct TAR_NODE *child, Vector path)
+find_parent(struct PATH_NODE *child, Vector path)
 {
     size_t i;
-    struct TAR_NODE *parent_node;
-    
+    struct PATH_NODE *parent_node;
+
     char *parent_path;
 
     if (path.length == 0)
@@ -85,7 +85,7 @@ find_parent(struct TAR_NODE *child, Vector path)
 
     for (i = 0; i < nodes.length; i++)
     {
-        parent_node = (struct TAR_NODE *) vector_get(nodes, i);
+        parent_node = (struct PATH_NODE *) vector_get(nodes, i);
 
         if (strcmp(parent_path, parent_node->header->name) == 0)
         {
@@ -95,15 +95,15 @@ find_parent(struct TAR_NODE *child, Vector path)
     }
 }
 
-void 
+void
 test_ls_root(void)
 {
     size_t i;
-    struct TAR_NODE *node;
+    struct PATH_NODE *node;
 
     for (i = 0; i < nodes.length; i++)
     {
-        node = (struct TAR_NODE *) vector_get(nodes, i);
+        node = (struct PATH_NODE *) vector_get(nodes, i);
 
         if (node->parent == NULL)
         {
@@ -121,19 +121,19 @@ parse_tar(Range ramdisk_range)
     char *node_name;
     struct TAR_HEADER *header;
 
-    struct TAR_NODE *node;
+    struct PATH_NODE *node;
     uintptr_t addr = ramdisk_range.begin;
 
     for (i = 0;; i++)
     {
         header = (struct TAR_HEADER *) addr;
-        node = (struct TAR_NODE *) malloc(sizeof(struct TAR_NODE));
+        node = (struct PATH_NODE *) malloc(sizeof(struct PATH_NODE));
 
         if (header->name[0] == '\0')
         {
             break;
         }
-        
+
         filename = vector_split(header->name, '/');
         node->header = header;
 
@@ -165,4 +165,26 @@ parse_tar(Range ramdisk_range)
     test_ls_root();
 
     return i;
+}
+
+uintptr_t 
+find_node(const char *filename)
+{
+    size_t i;
+    struct PATH_NODE *node;
+    struct TAR_HEADER *header;
+
+    filename++;
+    for (i = 0; i < nodes.length; i++)
+    {
+        node = (struct PATH_NODE *) vector_get(nodes, i);
+        header = node->header;
+
+        if (strcmp(header->name, filename) == 0)
+        {
+            klog(OK, "%x\n", header);
+        }
+    }
+
+    return 0;
 }

@@ -15,8 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma GCC diagnostic ignored "-Wpedantic" /* Just because of the bit field (I'm so sad) 
-                                             */
+
 
 #ifndef _NAVY_X86_GDT_H_
 #define _NAVY_X86_GDT_H_
@@ -32,6 +31,9 @@ struct gdtdesc
     uint32_t offset;
 } __attribute__((packed));
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
+                                           
 struct gdtentry
 {                               /* https://wiki.osdev.org/File:GDT_Entry.png */
     uint16_t limit0_15;
@@ -43,6 +45,7 @@ struct gdtentry
     uint8_t base24_31;
 } __attribute__((packed));
 
+#pragma GCC diagnostic pop
 
 enum gdtbit
 {                               /* https://wiki.osdev.org/File:Gdt_bits_fixed.png */

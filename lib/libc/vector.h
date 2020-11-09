@@ -15,14 +15,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* I define the Libc, so I can add everything I want ok ? */
+/*
+ * I define the Libc, so I can add everything I want ok ? 
+ */
 
 #ifndef _NAVY_LIBC_VECTOR_H_
 #define _NAVY_LIBC_VECTOR_H_
 
 #include <stddef.h>
 
-typedef struct 
+typedef struct
 {
     void **array;
     size_t length;

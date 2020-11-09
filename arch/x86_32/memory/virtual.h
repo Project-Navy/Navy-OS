@@ -17,7 +17,6 @@
 
 #ifndef _NAVY_X86_VIRTUAL_H_
 #define _NAVY_x86_VIRTUAL_H_
-#pragma GCC diagnostic ignored "-Wpedantic"
 
 #define PAGE_SIZE (4096)
 
@@ -35,6 +34,9 @@
 #define MEMORY_NONE (0)
 #define MEMORY_USER (1 << 0)
 #define MEMORY_CLEAR (1 << 1)
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
 
 union PAGE_DIR_ENTRY
 {
@@ -55,6 +57,7 @@ union PAGE_DIR_ENTRY
     uint32_t as_uint;
 
 } __attribute__((packed));
+
 
 typedef union PAGE_DIR_ENTRY PageDirEntry;
 
@@ -89,6 +92,8 @@ struct PAGE_TABLE
 {
     PageTableEntry entries[1024];
 } __attribute__((packed));
+
+#pragma GCC diagnostic pop
 
 void init_paging(BootInfo *);
 void allocate_page(size_t);
