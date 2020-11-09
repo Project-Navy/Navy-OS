@@ -1,6 +1,8 @@
 [submodule "third-party/limine"]
 	path = third-party/limine
 	url = https://github.com/Project-Navy/limine.git
+	branch = master
 [submodule "third-party/echfs"]
 	path = third-party/echfs
 	url = https://github.com/qword-os/echfs.git
+	branch = master
