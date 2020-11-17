@@ -23,15 +23,34 @@
 
 #include "kernel/filesystem/ramdisk.h"
 
-struct PATH_NODE 
+enum NODE_TYPE
 {
+    TARNODE
+};
+
+struct PATH_NODE 
+{ 
     char filename[100];
-    struct TAR_HEADER *header;
+    enum NODE_TYPE type;
     struct PATH_NODE *parent;
     Vector children;
+
+    union 
+    {
+        struct TAR_HEADER *header;
+    };
+};
+
+struct VFSNODE 
+{
+    struct PATH_NODE *node;
+
+    size_t (*read)(struct VFSNODE, void *, size_t);
+    size_t (*write)(struct VFSNODE, const void *, size_t);
 };
 
 uintptr_t find_node(const char *, Vector);
 void find_parent(struct PATH_NODE *, Vector, Vector);
+void init_vfsnode(struct VFSNODE *);
 
 #endif

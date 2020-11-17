@@ -36,7 +36,7 @@ int new_pid = 0;
 int
 create_task(char *name, void (*thread)())
 {
-
+    size_t i;
     int last_pid;
     uintptr_t addr;
     task_t *task;
@@ -55,6 +55,12 @@ create_task(char *name, void (*thread)())
     task->pid = new_pid;
     task->stack = addr + STACK_SIZE;
     task->address_space = kernel_address_space();   /* It's temporary */
+
+
+    for (i = 0; i < 64; i++)
+    {
+        init_vfsnode(&task->vfsnodes[i]);
+    }
 
     stackframe =
         (struct InterruptStackFrame *) (addr - sizeof(struct InterruptStackFrame));

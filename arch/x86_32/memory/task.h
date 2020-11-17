@@ -19,6 +19,7 @@
 #define _NAVY_x86_MEMORY_TASKS_H_
 
 #include "arch/x86_32/interrupt/interrupt.h"
+#include "kernel/filesystem/filesystem.h"
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -49,6 +50,7 @@ struct TASK
     uint32_t joinee_pid;
     uintptr_t return_value;
     uintptr_t joinee_return_value;
+    struct VFSNODE vfsnodes[64];
 
     void (*thread)();
 };

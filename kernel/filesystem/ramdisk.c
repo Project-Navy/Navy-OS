@@ -103,6 +103,8 @@ parse_tar(Range ramdisk_range)
         header = (struct TAR_HEADER *) addr;
         node = (struct PATH_NODE *) malloc(sizeof(struct PATH_NODE));
 
+        node->type = TARNODE;
+
         if (header->name[0] == '\0')
         {
             break;

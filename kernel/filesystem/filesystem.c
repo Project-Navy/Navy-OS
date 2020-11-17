@@ -71,3 +71,10 @@ find_node(const char *filename, Vector nodes)
 
     return 0;
 }
+
+void init_vfsnode(struct VFSNODE *self)
+{
+    self->node = NULL;
+    self->read = NULL;
+    self->write = NULL;
+}
