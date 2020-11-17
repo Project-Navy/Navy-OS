@@ -17,6 +17,7 @@
 
 #include "arch/arch.h"
 #include "kernel/filesystem/ramdisk.h"
+#include "kernel/filesystem/filesystem.h"
 #include "kernel/log.h"
 
 #include <stddef.h>
@@ -67,33 +68,6 @@ getsize(const char *in)
     return size;
 }
 
-void
-find_parent(struct PATH_NODE *child, Vector path)
-{
-    size_t i;
-    struct PATH_NODE *parent_node;
-
-    char *parent_path;
-
-    if (path.length == 0)
-    {
-        child->parent = NULL;
-    }
-
-    parent_path = vector_join(path, '/');
-    strcat(parent_path, "/");
-
-    for (i = 0; i < nodes.length; i++)
-    {
-        parent_node = (struct PATH_NODE *) vector_get(nodes, i);
-
-        if (strcmp(parent_path, parent_node->header->name) == 0)
-        {
-            vector_push_back(&parent_node->children, child);
-            child->parent = parent_node;
-        }
-    }
-}
 
 void
 test_ls_root(void)
@@ -147,7 +121,7 @@ parse_tar(Range ramdisk_range)
         }
 
         strcpy(node->filename, node_name);
-        find_parent(node, filename);
+        find_parent(node, filename, nodes);
 
         vector_push_back(&nodes, node);
 
@@ -167,24 +141,3 @@ parse_tar(Range ramdisk_range)
     return i;
 }
 
-uintptr_t 
-find_node(const char *filename)
-{
-    size_t i;
-    struct PATH_NODE *node;
-    struct TAR_HEADER *header;
-
-    filename++;
-    for (i = 0; i < nodes.length; i++)
-    {
-        node = (struct PATH_NODE *) vector_get(nodes, i);
-        header = node->header;
-
-        if (strcmp(header->name, filename) == 0)
-        {
-            klog(OK, "%x\n", header);
-        }
-    }
-
-    return 0;
-}

@@ -15,33 +15,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _NAVY_FILESYSTEM_RAMDISK_H_
-#define _NAVY_FILESYSTEM_RAMDISK_H_
+#ifndef _NAVY_FILESYSTEM_H_
+#define _NAVY_FILESYSTEM_H_
 
-#include <Navy/libmultiboot.h>
-#include <Navy/range.h>
+#include <stdint.h>
+#include <vector.h>
 
-struct TAR_HEADER
+#include "kernel/filesystem/ramdisk.h"
+
+struct PATH_NODE 
 {
-    char name[100];
-    char mode[8];
-    char uid[8];
-    char gid[8];
-    char size[12];
-    char mtime[12];
-    char chksum[8];
-    char typeflag;
-    char linkname[100];
-    char magic[6];
-    char version[2];
-    char uname[32];
-    char gname[32];
-    char devmajor[8];
-    char devminor[8];
-    char prefix[155];
-} __attribute__((packed));
+    char filename[100];
+    struct TAR_HEADER *header;
+    struct PATH_NODE *parent;
+    Vector children;
+};
 
-void mount_ramdisk(BootInfo *);
-size_t parse_tar(Range);
+uintptr_t find_node(const char *, Vector);
+void find_parent(struct PATH_NODE *, Vector, Vector);
 
 #endif
